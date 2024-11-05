@@ -433,3 +433,75 @@ export * from "./produto"
 export * from "./parcelamento"
 ```
 
+[^ Sumário ^](./README.md)
+
+## Banco de Dados Mockado
+
+Para que possamos dar procedimento ao projeto, precisaremos mockar alguns produtos para que possamos exibir nas páginas que iremos criar.  
+Posteriormente será executado um processo que irá preencher o banco de dados com essas informações.  
+
+Então no caminho `src\core\constants` crie o arquivo `produtos.ts` e insira os dados ***(não irei colocar todos os daqui aqui pois são muitos, mas constarão no repositório).***
+
+```ts
+// produtos.ts
+
+import { Produto } from '../produto'
+
+const produtos: Produto[] = [
+  {
+    id: 1,
+    nome: 'Notebook Gamer Acer Nitro 5',
+    descricao:
+      'O Acer Nitro 5 é um notebook gamer poderoso, ideal para jogos pesados e multitarefas.',
+    marca: 'Acer',
+    modelo: 'AN515-54-58CL',
+    imagem:
+      'https://firebasestorage.googleapis.com/v0/b/formacao-dev.appspot.com/o/lancamentos%2Fgam3rstore%2Facer-nitro-5.png?alt=media&token=094ba6a8-1a4d-414a-b32c-c176bfeaca8e',
+    nota: 4.5,
+    videoReview:
+      'https://www.youtube.com/embed/8NQFr9De3lU?si=s_lN2KTQresD-36Y',
+    tags: ['Baixou'],
+    precoBase: 6499.99,
+    precoPromocional: 5999.99,
+    menorPreco: 4850.9,
+    maiorPreco: 9800.8,
+    precoMedio: 6503.7,
+    especificacoes: {
+      destaque: 'NVIDIA GeForce RTX 2060',
+      Processador: 'Intel Core i5-9300H',
+      Memória: '16GB DDR4',
+      Armazenamento: '512GB SSD',
+      'Placa de Vídeo': 'NVIDIA GeForce RTX 2060',
+      Tela: '15.6 polegadas Full HD',
+      Peso: '2.5 Kg',
+    },
+  },
+...
+]
+
+export default Produtos
+```
+
+Agora precisamos atualizar o aquivo `index.ts` do diretório `\constants` adicionando o comando que importar e exportar o nosso Mock do Banco de Dados `produtos.ts`.
+
+```ts
+// constants\index.ts
+
+import produtos from "./produtos"
+
+const QTDE_MAX_PARCELAS = 12
+const TAXA_JUROS_MENSAL = 0.0167
+
+export { produtos, QTDE_MAX_PARCELAS, TAXA_JUROS_MENSAL }
+```
+
+E para finalizar, precisamos atualizar o arquivo `index.ts` no diretório Core da Aplicação `\core` exportando tudo que o diretório `\constants` contém.
+
+```ts
+// core\index.ts
+
+export * from "./constants"
+export * from "./produto"
+export * from "./parcelamento"
+```
+
