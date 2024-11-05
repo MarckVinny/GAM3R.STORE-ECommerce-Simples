@@ -152,7 +152,7 @@ No momento nosso foco inicial será ***Página Inicial*** e na página de ***Det
 
 [^ Sumário ^](./README.md)
 
-## Produto
+## PRODUTO
 
 ### Interface Produto
 
@@ -319,7 +319,7 @@ Como podemos ver acima, estamos exportando `export` tudo `*` de `from` Produto `
 
 [^ Sumário ^](./README.md)
 
-### Parcelamento
+## PARCELAMENTO
 
 No Parcelamento, iremos definir qual é a estrutura de um parcelamento juntamente com o cálculo relacionado a juros compostos (tendo um preço promocional dividido por uma quantidade de parcelas) mostrando qual o valor das parcelas.  
 Esta Regra do Negócio continua separada de tecnologias e puramente pertencente ao Núcleo da Aplicação.  
