@@ -152,6 +152,8 @@ No momento nosso foco inicial será ***Página Inicial*** e na página de ***Det
 
 [^ Sumário ^](./README.md)
 
+## Produto
+
 ### Interface Produto
 
 Estaremos utilizando a abordagem de modelagem por ***interface*** por simplicidade, pois, se optasse-mos por DDD, Arquitetura Limpa e outros padrões que iriam influenciar muito a arquitetura, seria utilizado a abordagem de se criar uma Classe ao invés de uma interface.  
@@ -288,7 +290,7 @@ A herança seria mais indicado caso existissem outras Entidades que também foss
 Agora iremos criar e configurar o arquivo `index.ts` do diretório ***Produto*** presente no caminho `src\core\produto`, nesse arquivo, iremos importar todas as interfaces que implementamos até o momento.  
 
 ```ts
-// index.ts
+// produto\index.ts
 
 import Especificacoes from "./Especificacoes"
 import Precificavel from "./Precificavel"
@@ -308,9 +310,126 @@ Esse mesmo processo precisa ser feito em todos os diretórios e arquivos que pre
 Então, vamos criar e configurar o `index.ts` do Core, no caminho `src\core`.
 
 ```ts
-// index.ts
+// core\index.ts
 
 export * from "./produto"
 ```
 
 Como podemos ver acima, estamos exportando `export` tudo `*` de `from` Produto `"./produto`, esse mesmo procedimento deve ser feito para outros diretórios que pretendemos expor para toda a Aplicação.
+
+[^ Sumário ^](./README.md)
+
+### Parcelamento
+
+No Parcelamento, iremos definir qual é a estrutura de um parcelamento juntamente com o cálculo relacionado a juros compostos (tendo um preço promocional dividido por uma quantidade de parcelas) mostrando qual o valor das parcelas.  
+Esta Regra do Negócio continua separada de tecnologias e puramente pertencente ao Núcleo da Aplicação.  
+
+O Parcelamento não estará relacionado ao produto e nem ao pedido, pois, o parcelamento pode ser usado em várias partes da Aplicação.
+
+[^ Sumário ^](./README.md)
+
+### Interface Parcelamento
+
+Agora no caminho `src\core` crie um diretório chamado `parcelamento` e dentro dele crie o arquivo `Parcelamento.ts` que será nossa interface.  
+
+Vamos implementar um interface simples contendo os atributos: valorTotal (que servirá como base para o calculo), valorParcela, qtdeParcelas e taxaJuros.
+
+```ts
+// Parcelamento.ts
+
+export default interface Parcelamento {
+  valorTotal: number
+  valorParcela: number
+  qtdeParcelas: number
+  taxaJuros: number
+}
+```
+
+[^ Sumário ^](./README.md)
+
+### Classe Calcular Parcelamento
+
+Agora iremos criar uma Classe que irá implementar o cálculo relacionado ao parcelamento.  
+
+> [!NOTE]
+> Esse cálculo, ele é algo que representa a Regra de Negócio da Aplicação e isso não deveria estar ***"amarrado ou atrelado"*** ao Backend, pois, as Regras precisam utilizar apenas a linguagem de programação e dependendo o mínimo possível de Framework, assim se isola a Regra e podemos reusar em qualquer lugar, até mesmo em outra aplicação semelhante.  
+
+<p>
+
+Antes de qualquer coisa precisamos criar o arquivo `index.ts` no diretório chamado `\constants` no caminho `src\core` que irá conter as constantes que iremos precisar usar em nossa ***Classe Calcular Parcelamento***.  
+
+```ts
+// constants\index.ts
+
+const QTDE_MAX_PARCELAS = 12
+const TAXA_JUROS_MENSAL = 0.0167
+
+export { QTDE_MAX_PARCELAS, TAXA_JUROS_MENSAL }
+```
+
+Como podemos ver acima, criamos duas constantes, uma referente a ***quantidade de parcelas*** e a outra referente a ***taxa de juros*** e logo em seguida exportamos as duas constantes para que possamos usar na aplicação.  
+
+Agora que já temos nossas constantes criadas, podemos começar a implementar nossa Classe.  
+No caminho `src\core\parcelamento` crie o arquivo `CalcularParcelamento.ts` que será nossa Classe.
+
+```ts
+// CalcularParcelamento.ts
+
+import { QTDE_MAX_PARCELAS, TAXA_JUROS_MENSAL } from "../constants";
+import Parcelamento from "./Parcelamento";
+
+export default class CalcularParcelamento {
+  executar(
+    valor: number,  //* Valor Base promocional
+    qtdeParcelas: number = QTDE_MAX_PARCELAS,
+    taxaJuros: number = TAXA_JUROS_MENSAL //* Pode passar uma taxa específica ou usa a taxa padrão cadastrada
+  ): Parcelamento {
+    if (qtdeParcelas < 2 || qtdeParcelas > QTDE_MAX_PARCELAS){
+      //* Dispara uma exceção caso tem parcelar acima do permitido 
+      throw new Error(`Quantidade de parcelas deve ser entre 2 e ${QTDE_MAX_PARCELAS}`)
+    }
+
+    //* Calcula o valor total do produto, junto com os juros compostos
+    const totalComJuros = this.calcularJurosCompostos(valor, taxaJuros, qtdeParcelas)
+
+    return {
+      valorParcela: this.comDuasCasasDecimais(totalComJuros / qtdeParcelas),
+      valorTotal: this.comDuasCasasDecimais(totalComJuros),
+      qtdeParcelas,
+      taxaJuros,
+    }
+  }
+
+    private calcularJurosCompostos(valorTotal: number, taxaMensal: number, qtdeParcelas: number){
+      //* O cálculo é o Valor Promocional, multiplicado pela formula
+      //* 1 mais a taxaMensal elevado a qtdeParcelas Ex. (0.0167)¹²
+      return valorTotal * Math.pow(1 + taxaMensal, qtdeParcelas)
+    }
+
+    private comDuasCasasDecimais(valor: number): number {
+      return Math.round(valor * 100) / 100
+    }
+}
+```
+
+O próximo passo é criar o arquivo `index.ts` no diretório `\parcelamento` importando e exportando todos os arquivos constantes nele.  
+
+```ts
+// parcelamento\index.ts
+
+import CalcularParcelamento from "./CalcularParcelamento"
+import Parcelamento from "./Parcelamento"
+
+export { CalcularParcelamento }
+export type { Parcelamento }
+```
+
+E para completar o processo, precisamos atualizar o arquivo `index.ts` do diretório `\core` adicionando o diretório `\parcelamento` importando todos os seus arquivos.  
+
+```ts
+// core\index.ts
+
+export * from "./produto"
+export * from "./parcelamento"
+```
+
