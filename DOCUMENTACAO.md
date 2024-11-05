@@ -505,3 +505,53 @@ export * from "./produto"
 export * from "./parcelamento"
 ```
 
+[^ Sumário ^](./README.md)
+
+## Formatando Moeda
+
+Agora iremos criar uma Classe que irá formatar como a Moeda será exibida na tela.
+No caminho `src\core` crie um diretório `\utils` e dentro crie um arquivo `Moeda.ts` que irá conter a implementação da da ***Classe Moeda.***
+
+```ts
+// Moeda.ts
+
+export default class Moeda {
+  static formatar(
+    valor: number,
+    localizacao: string = 'pt-BR',
+    moeda: string = 'BRL'
+  ): string {
+    return (valor ?? 0).toLocaleString(localizacao, {
+      style: 'currency',
+      currency: moeda,
+    })
+  }
+}
+```
+
+A Classe acima cria um Método estático chamado `formatar()` com os atributos: valor, localização (que por padrão seleciona o idioma ***'pt-BR'***) e moeda (que por padrão seleciona a moeda ***'BRL'***) e por fim formata a moeda.  
+
+E essa é a Classe Utilitária que iremos utilizar em toda a Aplicação quando formos formatar qualquer moeda.  
+
+Para finalizar, precisamos importar e exportar a Classe Moeda, no arquivo `index.ts` do diretório `\utils`.  
+
+```ts
+// utils\index.ts
+
+import Moeda from "./Moeda"
+
+export { Moeda }
+```
+
+E para finalizar, precisamos atualizar o `index.ts` do Core da Aplicação exportando todo o conteúdo do diretório `\utils`.
+
+```ts
+// core\index.ts
+
+export * from "./constants"
+export * from "./parcelamento"
+export * from "./produto"
+export * from "./utils"
+```
+
+Por enquanto o Core da Aplicação está finalizado para que possamos começar e criar a Interface Gráfica da Aplicação, mas, ainda tem bastantes funcionalidades para serem acrescentadas ao Core, mas serão adicionados futuramente.
