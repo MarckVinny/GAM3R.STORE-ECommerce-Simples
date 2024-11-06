@@ -555,3 +555,118 @@ export * from "./utils"
 ```
 
 Por enquanto o Core da Aplicação está finalizado para que possamos começar e criar a Interface Gráfica da Aplicação, mas, ainda tem bastantes funcionalidades para serem acrescentadas ao Core, mas serão adicionados futuramente.
+
+[^ Sumário ^](./README.md)
+
+## FRONTEND - Interface Gráfica
+
+Agora iremos iniciar a programação da ***Interface Gráfica*** a parte visual da aplicação.  
+
+### Componente ProdutoItem
+
+Inicialmente irenos implementar o ***Item do Produto*** e para isso, vamos criar um Componente chamado ***ProdutoItem***, então, no caminho `src\app` crie um diretório `\components` depois crie outro diretório `\produto` e dentro crie o arquivo `ProdutoItem.tsx`.  
+
+Como puderam notar, agora estamos usando a extensão ***".tsx"*** ela possui um "x" no final pois estaremos criando página Rect que mistura o ***"html"*** e o ***"css"*** na criação da interface gráfica, ou seja, um arquivo typescript possui código html e css dentro dele.
+
+> ***NOTA:***
+> ___
+> *Um atalho no VSCode para criar essa estrutura mais rápido é ao invés de criar uma pasta de cada vez e depois criar o arquivo, pode clicar em criar arquivo e digitar: `components\produto\ProdutoItem.ts`.  
+Assim, já são criadas as pastas e o arquivo com um único clique.  
+**PS.: lembrando que para esse exemplo precisa estar dentro do** `\app`.*
+<p>
+
+Para iniciar e poder começar a visualizar algo na tela, vamos criar uma Função que irá exibir uma DIV contendo o texto ***"Produto Item"***, somente isso por enquanto.  
+
+```tsx
+// ProdutoItem.tsx
+
+export default function ProdutoItem () {
+  return (
+    <div className="text-2xl border-2 border-gray-600 rounded-2xl p-4">
+      Produto Item
+    </div>
+  )
+}
+```
+
+No Componente ProdutoItem, O texto ***"Produto Item"*** será grande *(tamanho 2xl)*, estará dentro de uma div com bordas de 2 pixels de espessura, uma cor cinza escura e bordas arredondadas *(2xl)*.
+O conteúdo dentro da div terá um espaçamento interno *(padding)* de 1rem *(16px)*, garantindo que o texto não fique colado nas bordas da div.  
+
+- `text-2xl`:  
+***Função:*** Define o tamanho do texto como 2xl *(extra grande)*.  
+***Tamanho:*** Aproximadamente 1.5rem *(24px)* por padrão no Tailwind CSS.  
+***Exemplo:*** Aumenta o tamanho da fonte do texto ***"Produto Item"***.  
+
+- `border-2`:  
+***Função:*** Aplica uma borda ao redor da div com uma largura de 2 pixels.
+***Exemplo:*** A borda em volta da div terá 2 pixels de espessura.  
+
+- `border-gray-600`:  
+***Função:*** Define a cor da borda como cinza escuro.  
+***Escala:*** gray-600 é uma cor da paleta de cinza do Tailwind, e é uma tonalidade intermediária de cinza.  
+***Exemplo:*** A borda ao redor da div terá uma cor de cinza escuro.  
+
+- `rounded-2xl`:  
+***Função:*** Define o arredondamento das bordas como 2xl.  
+***Significado:*** Isso aplica bordas arredondadas com um raio maior *(aproximadamente 1rem ou 16px de raio de curvatura)*.  
+***Exemplo:*** As bordas da div terão cantos arredondados de forma mais pronunciada.  
+
+- `p-4`:  
+***Função:*** Aplica um padding (espaçamento interno) de 1rem (16px) em todos os lados da div.  
+***Exemplo:*** O conteúdo "Produto Item" ficará afastado das bordas da div, com 1rem de espaço por todos os lados.  
+
+Agora que temos o Componente ProdutoItem criado, podemos adiciona-lo a página principal da aplicação, e para isso abra o arquivo `page.tsx` no caminho `src\app` e faça as alterações abaixo.  
+
+```tsx
+// Page.tsx
+
+import ProdutoItem from "./components/produto/ProdutoItem";
+
+export default function Home() {
+  return (
+    <div className="flex flex-col items-center justify-center space-y-2 h-screen">
+      <ProdutoItem />
+      <ProdutoItem />
+      <ProdutoItem />
+      <ProdutoItem />
+    </div>
+  );
+}
+```
+
+Acima temos a página inicial de nossa aplicação renderizando 4 Componentes `<ProdutoItem />` eles serão exibidos centralizados na tela com um espaçamento de 2px entre eles.  
+
+A div que envolve os componentes ***ProdutoItem*** usará o Flexbox para organizar os itens em uma coluna, centralizá-los tanto vertical quanto horizontalmente na tela.  
+
+Entre os itens ***ProdutoItem***, haverá um pequeno espaçamento *(8px)* definido por `space-y-2`.  
+
+A div ocupará toda a altura da tela *(h-screen)*, e os itens serão alinhados ao centro, tanto na vertical quanto na horizontal, abaixo o que cada ClassName faz:  
+
+- `flex`:  
+***Função***: Define que o contêiner usará o modelo de layout Flexbox.  
+***Exemplo***: O Flexbox ajuda a organizar e alinhar os itens filhos *(os componentes ***ProdutoItem***)* de maneira eficiente e controlada.  
+
+- `flex-col`:  
+***Função***: Organiza os itens filhos na direção vertical *(coluna)*.  
+***Exemplo***: Os componentes ***ProdutoItem*** serão empilhados um abaixo do outro, formando uma coluna.  
+
+- `items-center`:  
+***Função***: Alinha os itens filhos horizontalmente no centro do contêiner *(ao longo do eixo transversal do Flexbox).*  
+***Exemplo***: Todos os ***ProdutoItem*** serão centralizados horizontalmente dentro da div.  
+
+- `justify-center`:  
+***Função***: Alinha os itens filhos verticalmente no centro do contêiner *(ao longo do eixo principal do Flexbox).*  
+***Exemplo***: Todos os ***ProdutoItem*** serão centralizados verticalmente dentro da div.  
+
+- `space-y-2`:  
+***Função***: Adiciona um espaçamento vertical de *0.5rem (8px)* entre os itens filhos *(no caso, entre os componentes ***ProdutoItem***).*  
+***Exemplo***: Cria um pequeno espaço entre cada um dos componentes ***ProdutoItem*** na lista.  
+
+- `h-screen`:  
+***Função***: Define a altura do contêiner como 100% da altura da viewport *(tela visível)*.  
+***Exemplo***: A div que contém os componentes ***ProdutoItem*** ocupará toda a altura da tela, ajudando a centralizar verticalmente os itens dentro dessa área.  
+
+Essas classes trabalham juntas para criar uma estrutura bem organizada e visualmente equilibrada, com centralização dos itens e uma estética agradável com bordas arredondadas e espaços internos adequados e podemos verificar como ficou, na imagem a seguir:  
+
+<div align='center'><img alt='renderização do componente ProdutoItem' src='../imagens/002.png' /></div>
+
