@@ -670,3 +670,96 @@ Essas classes trabalham juntas para criar uma estrutura bem organizada e visualm
 
 <div align='center'><img alt='renderização do componente ProdutoItem' src='./imagens/002.png' /></div>
 
+[^ Sumário ^](./README.md)
+
+### Definindo Parâmetros para o Componente ProdutoItem
+
+Dentro do ***Componente ProdutoItem*** é que podemos definir quais são os parâmetros que queremos passar para o componente.  
+
+```tsx
+// ProdutoItem.tsx
+
+import { Produto } from "@/core"
+
+export interface ProdutoItemProps {
+  produto: Produto
+}
+
+export default function ProdutoItem (props: ProdutoItemProps) {
+  const { produto } = props
+  return (
+    <div className="text-2xl border-2 border-gray-600 rounded-2xl p-4">
+      {produto.nome}
+    </div>
+  )
+}
+```
+
+Como podemos ver acima, a importação do Produto foi feita de forma diferente, note que tem um ***"@"*** antes de apontar para a pasta Core `@/core` ele não está sendo acessado por caminho relativo como é feito comumente, isso acontece porque exportamos o Núcleo da Aplicação, a Regra de Negócio.  
+
+E mais adiante quanto retirar-mos o Core de dentro do Frontend, a importação ficará sem a barra depois do arroba.  
+
+```tsx
+// ProdutoItem.tsx
+
+import { Produto } from "@/core"
+...
+```
+
+Quando definimos e exportamos uma interface `ProdutoItemProps` informamos os atributos que queremos passar para o Componente, que em nosso caso estamos definindo que o Componente precisa ter um Produto, definindo um atributo `produto:` que recebe um `Produto`.  
+
+> ***NOTA:***  
+> ___
+> *Por padrão definimos o nome de uma propriedade adicionando o sufixo **"Props"** após o nome do Componente.*
+<p>
+
+```tsx
+// ProdutoItem.tsx
+
+...
+export interface ProdutoItemProps {
+  produto: Produto
+}
+...
+```
+
+E uma vez que temos o Produto, o instanciamos em uma constante `const { produto } = props` e o usamos pegando o nome do produto por exemplo `{produto.nome}`.  
+
+```tsx
+// ProdutoItem.tsx
+
+...
+export default function ProdutoItem (props: ProdutoItemProps) {
+  const { produto } = props
+  return (
+    <div className="text-2xl border-2 border-gray-600 rounded-2xl p-4">
+      {produto.nome}
+    </div>
+  )
+}
+```
+
+Agora que já definimos os atributos em nosso componente, precisamos editar a página principal para exibir os Produtos que Mockamos com os dados dos produtos, então, edite o arquivo `page.tsx` no caminho `src\app`.  
+
+```tsx
+// Page.tsx
+
+import { produtos } from "@/core";
+import ProdutoItem from "./components/produto/ProdutoItem";
+
+export default function Home() {
+  return (
+    <div className="flex flex-col items-center justify-center space-y-2 h-screen">
+      <ProdutoItem produto={produtos[0]}/>
+      <ProdutoItem produto={produtos[1]}/>
+      <ProdutoItem produto={produtos[2]}/>
+      <ProdutoItem produto={produtos[3]}/>
+    </div>
+  );
+}
+```
+
+Como podemos observar no código acima, podemos acessar os dados de Produtos através do índice `produto={produtos[0]}`, veja abaixo como é exibido na tela:  
+
+<div align='center'><img alt='Nome dos produtos' src='./imagens/003.png' /></div>
+

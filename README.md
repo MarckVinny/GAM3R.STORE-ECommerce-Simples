@@ -23,3 +23,4 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
   - [Formatando Moeda](./DOCUMENTACAO.md/#formatando-moeda)
 - [FRONTEND - Interface Gráfica](./DOCUMENTACAO.md/#frontend---interface-gráfica)
   - [Componente ProdutoItem](./DOCUMENTACAO.md/#componente-produtoitem)
+    - [Definindo Parâmetros para o Componente ProdutoItem](./DOCUMENTACAO.md/#definindo-parâmetros-para-o-componente-produtoitem)
