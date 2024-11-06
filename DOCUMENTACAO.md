@@ -668,5 +668,5 @@ A div ocupará toda a altura da tela *(h-screen)*, e os itens serão alinhados a
 
 Essas classes trabalham juntas para criar uma estrutura bem organizada e visualmente equilibrada, com centralização dos itens e uma estética agradável com bordas arredondadas e espaços internos adequados e podemos verificar como ficou, na imagem a seguir:  
 
-<div align='center'><img alt='renderização do componente ProdutoItem' src='../imagens/002.png' /></div>
+<div align='center'><img alt='renderização do componente ProdutoItem' src='./imagens/002.png' /></div>
 
