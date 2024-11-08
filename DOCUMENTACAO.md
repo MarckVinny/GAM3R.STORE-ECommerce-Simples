@@ -806,6 +806,7 @@ Vamos quebrar o que ela faz, linha por linha:
     ```
 
     - A função começa importando o array `produtos` do módulo `@/core`. Esse array contém uma lista de produtos *(presumivelmente, com atributos como `id`, `nome`, `preço`, etc.)*.  
+
     - Também importa o componente `ProdutoItem` de um caminho relativo (`"./components/produto/ProdutoItem"`). Esse componente será usado para exibir informações sobre cada produto individualmente.
 
 2. Definição da função `Home`:
@@ -826,15 +827,24 @@ Vamos quebrar o que ela faz, linha por linha:
     ```
 
     - A função `Home` é exportada como o componente padrão *(página principal do app React)*.  
+
     - Dentro do `return`, o TSX define um `div` com uma série de classes do ***Tailwind CSS*** para o layout.  
     Estas classes são:  
+
       - `grid`: Define um layout de grade (grid layout).  
+
       - `grid-cols-4`: Organiza os itens em 4 colunas.  
+
       - `items-center`: Alinha os itens verticalmente no centro.  
+
       - `justify-center`: Alinha os itens horizontalmente no centro.  
+
       - `space-y-2`: Define um espaçamento de 2 unidades entre os itens na direção vertical.  
+
       - `space-x-2`: Define um espaçamento de 2 unidades entre os itens na direção horizontal.  
+
       - `m-10`: Adiciona uma margem de 10 unidades ao redor da grade.  
+
       - `h-screen`: Faz o div ter a altura total da tela (100% da altura da janela do navegador).  
 
 3. Renderização de `ProdutoItem`:  
@@ -849,6 +859,7 @@ Vamos quebrar o que ela faz, linha por linha:
     ```
 
     - O código usa o método `.map()` para iterar sobre o array `produtos`.  
+
     - Para cada item em `produtos`, é criado um componente `ProdutoItem`, passando o `produto` como uma ***prop*** para o componente, e utilizando o `id` do produto como ***key*** para ajudar o React a gerenciar o DOM de forma eficiente.  
 
 Em resumo, a ***Função Home*** `function Home()` é um componente que exibe uma ***Lista de Produtos*** em um layout de grade, onde cada produto é renderizado através do componente `ProdutoItem`. O componente usa o ***Tailwind CSS*** para estilizar a interface, garantindo que a ***lista de produtos*** seja organizada em um ***Grid Responsivo*** e com espaçamento adequado.  
@@ -856,3 +867,112 @@ Em resumo, a ***Função Home*** `function Home()` é um componente que exibe um
 Cada produto é representado por um item individual *(`ProdutoItem`)* que recebe o objeto `produto` como uma propriedade. A `key` é usada para ajudar o React a otimizar a renderização de listas.
 
 <div align='center'><img alt='Lista de Componentes' src='./imagens/004.png' /></div>
+<p>
+
+[^ Sumário ^](./README.md)
+
+### Definindo um Layout Boxed
+
+Um ***layout boxed*** *(ou **layout em caixa**)* é um tipo de design de página em que o conteúdo da página é restrito a uma área centralizada e delimitada por uma borda, geralmente com um espaço vazio ao redor *(margens)*. Em vez de ocupar toda a largura da tela *(como ocorre no **layout full-width**, que preenche toda a largura da janela do navegador)*, o layout boxed mantém o conteúdo de uma página com uma largura fixa e um ***"gutter"*** ou espaçamento nas laterais, criando um efeito de ***"caixa"*** ao redor do conteúdo.  
+
+### Características principais do layout boxed
+
+- ***Conteúdo centralizado:***  
+O conteúdo da página, como textos, imagens, e outros elementos, é alinhado ao centro da tela, com margens nas laterais que o distanciam das bordas da janela.
+
+- ***Largura fixa:***  
+A largura do conteúdo geralmente é definida em pixels ou outras unidades fixas *(por exemplo, **1200px** de largura)*, o que significa que, independentemente do tamanho da tela do usuário, o conteúdo não se estende além dessa largura. Isso pode ser útil para criar um layout mais controlado e previsível.
+
+- ***Espaçamento ao redor:***  
+O espaço vazio ***ao redor do conteúdo*** *(conhecido como padding ou margem externa)* ajuda a criar uma sensação de ***"respiro"*** e de que o conteúdo está em uma área separada, como se estivesse dentro de uma caixa.
+
+- ***Estética mais organizada:***  
+O ***layout boxed*** é frequentemente preferido em sites que buscam um design mais limpo e estruturado, pois o limite de largura impede que o conteúdo se espalhe demais na tela, oferecendo uma leitura mais confortável.  
+
+### Exemplos de quando o layout boxed é utilizado
+
+- ***Sites de portfólio:***  
+Muitos designers e fotógrafos usam layouts em caixa para garantir que as imagens e o conteúdo sejam exibidos de forma clara e consistente, independentemente do tamanho da tela.  
+
+- ***Blog ou sites institucionais:***  
+Em blogs ou sites de conteúdo, um layout boxed pode tornar a leitura mais fácil e agradável, com um limite de largura que não distorce a experiência em telas grandes.  
+
+- ***E-commerce:***  
+Lojas online também podem usar layout boxed para garantir que as imagens de produtos, descrições e botões de ação não fiquem excessivamente grandes ou difíceis de interagir em telas grandes.
+
+### Comparação com o Layout Full-Width
+
+- ***Full-width:***  
+No ***layout full-width***, o conteúdo da página se estende por toda a largura da janela do navegador, independentemente do tamanho da tela. Isso pode ser ideal para criar uma experiência visual mais expansiva, mas pode ser menos controlado.  
+
+- ***Boxed:***  
+No ***layout boxed***, o conteúdo está restrito a uma largura definida, o que proporciona uma experiência mais controlada e centrada.  
+
+### Como aplicar um layout boxed no CSS?
+
+No caminho `src\app` edite o arquivo `globals.css` para que possamos configurar o CSS no Tailwind CSS.  
+
+O Tailwind, é organizado em 3 partes ***base, componentes e utilitários*** *(`base`, `components` e `utilities`)* e podemos extender essas camadas ***"layers"*** através da marcação `@layer` alguma coisa como por exemplo:  
+
+```css
+/* src\app\globals.css */
+
+...
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-10;
+  }
+}
+...
+```
+
+### Explicação de cada parte
+
+1. `@layer components`:  
+
+    O ***Tailwind CSS*** permite organizar e agrupar estilos em camadas *(layers)*. A diretiva `@layer` é usada para inserir regras de estilo dentro de uma camada específica. O Tailwind possui três camadas principais:  
+
+    - `base`: Para estilos base *(como `body`, `html`, etc.)*.  
+  
+    - `components`: Para componentes reutilizáveis *(como `botões`, `cards`, `containers`, etc.)*.  
+  
+    - `utilities`: Para classes utilitárias, que são a base do funcionamento do Tailwind.  
+  
+    Nesse caso, você está criando ou adicionando um componente à camada `components`.  
+
+2. `.container`:  
+
+    Aqui você está criando uma classe CSS chamada `.container`. Esse nome é frequentemente usado para definir um container de largura máxima, centralizado na página, que limita a largura do conteúdo dentro dele. É um padrão comum em muitos sites para melhorar a legibilidade e garantir que o conteúdo não se estenda demais na tela.  
+
+3. `@apply`:  
+
+    A diretiva `@apply` é uma funcionalidade do Tailwind CSS que permite aplicar classes utilitárias diretamente dentro de um arquivo CSS. Ela é útil quando você deseja criar um conjunto de classes reutilizáveis de forma mais compacta e legível.  
+
+    Nesse caso, as classes utilitárias estão sendo aplicadas à classe `.container`:  
+
+      - `max-w-7xl`:  
+      Define a largura máxima do container. O valor `7xl` corresponde a uma largura específica de ***80rem (1280px)***. Ou seja, o container pode ter até 80rem de largura, mas nunca mais que isso.  
+  
+      - `mx-auto`:  
+      Centraliza o container horizontalmente, definindo as margens esquerda e direita *(**margin-left** e **margin-right**)* como automáticas. Isso garante que o container fique centralizado na tela.  
+  
+      - `px-10`:  
+      Define um ***padding de 10 unidades*** nas direções ***esquerda*** e ***direita*** *(em Tailwind, o *padding* é um valor proporcional ao sistema de espaçamento configurado no Tailwind, normalmente `0.25rem`, `0.5rem`, etc.)*.  
+      Então, ***px-10*** aplica um ***padding-left*** e ***padding-right*** de ***2.5rem (40px)***.  
+
+Agora que temos nossa área ***Boxed*** definida, podemos utilizar em nossa página para que ela tenha uma área Boxed delimitada para que possamos criar nossa aplicação, então, edite o arquivo `page.tsx` no caminho `src\app`.  
+
+```tsx
+// page.tsx
+
+...
+    <div className="grid grid-cols-4 container items-center justify-center space-y-2 space-x-2 mt-5 h-screen">
+...
+
+```
+
+Só foi preciso adicionar a Classe Tailwind CSS `container` na `div` do Componente `ProdutoItem` que a página foi renderizada como esperado, só houve mais um pequeno ajuste na margem top para ficar um pouco melhor `mt-5` aplicando uma margem de 20px.
+
+Na imagem abaixo podemos observar como está ficando:  
+
+<div align='center'><img alt='imagem5' src='./imagens/005.png' /></div>

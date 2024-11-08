@@ -25,3 +25,4 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
   - [Componente ProdutoItem](./DOCUMENTACAO.md/#componente-produtoitem)
     - [Definindo Parâmetros para o Componente ProdutoItem](./DOCUMENTACAO.md/#definindo-parâmetros-para-o-componente-produtoitem)
     - [Definindo uma Lista de Componentes](./DOCUMENTACAO.md/#definindo-uma-lista-de-componentes)
+    - [Definindo um Layout Boxed](./DOCUMENTACAO.md/#definindo-um-layout-boxed)
