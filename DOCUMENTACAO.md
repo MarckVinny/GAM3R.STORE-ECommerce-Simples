@@ -763,3 +763,96 @@ Como podemos observar no código acima, podemos acessar os dados de Produtos atr
 
 <div align='center'><img alt='Nome dos produtos' src='./imagens/003.png' /></div>
 
+[^ Sumário ^](./README.md)
+
+### Definindo uma Lista de Componentes
+
+Agora transformaremos um ***Array de Objetos*** literais que está dentro do arquivo `src\core\constants\produtos.ts` para uma ***Lista de Componentes*** na interface gráfica.  
+
+```tsx
+// src\app\page.tsx
+
+import { produtos } from "@/core";
+import ProdutoItem from "./components/produto/ProdutoItem";
+
+export default function Home() {
+  return (
+    <div className="grid grid-cols-4 items-center justify-center space-y-2 space-x-2 m-10 h-screen">
+      {produtos.map((produto) => (
+        <ProdutoItem key={ produto.id } produto={ produto } />
+      ))}
+    </div>
+  );
+}
+```
+
+> ***NOTA:***
+> ___
+> *Toda vez que geramos uma **Lista de Componentes** através de um **Laço FOR** ou um **MAP** precisamos estabelecer uma **chave única** `key={ }` para que o React consiga alterar esse elemento específico.*
+<p>
+
+A função Home é um componente funcional escrito em React, usando TSX para renderizar a interface do usuário.  
+Vamos quebrar o que ela faz, linha por linha:
+
+1. Importações:
+
+    ```tsx
+    // src\app\page.tsx
+
+    import { produtos } from "@/core";
+    import ProdutoItem from "./components/produto/ProdutoItem";
+
+    ...
+    ```
+
+    - A função começa importando o array `produtos` do módulo `@/core`. Esse array contém uma lista de produtos *(presumivelmente, com atributos como `id`, `nome`, `preço`, etc.)*.  
+    - Também importa o componente `ProdutoItem` de um caminho relativo (`"./components/produto/ProdutoItem"`). Esse componente será usado para exibir informações sobre cada produto individualmente.
+
+2. Definição da função `Home`:
+
+    ```tsx
+    // src\app\page.tsx
+
+    ...
+    export default function Home() {
+      return (
+        <div className="grid grid-cols-4 items-center justify-center space-y-2 space-x-2 m-10 h-screen">
+          {produtos.map((produto) => (
+            <ProdutoItem key={ produto.id } produto={ produto } />
+          ))}
+        </div>
+      );
+    }
+    ```
+
+    - A função `Home` é exportada como o componente padrão *(página principal do app React)*.  
+    - Dentro do `return`, o TSX define um `div` com uma série de classes do ***Tailwind CSS*** para o layout.  
+    Estas classes são:  
+      - `grid`: Define um layout de grade (grid layout).  
+      - `grid-cols-4`: Organiza os itens em 4 colunas.  
+      - `items-center`: Alinha os itens verticalmente no centro.  
+      - `justify-center`: Alinha os itens horizontalmente no centro.  
+      - `space-y-2`: Define um espaçamento de 2 unidades entre os itens na direção vertical.  
+      - `space-x-2`: Define um espaçamento de 2 unidades entre os itens na direção horizontal.  
+      - `m-10`: Adiciona uma margem de 10 unidades ao redor da grade.  
+      - `h-screen`: Faz o div ter a altura total da tela (100% da altura da janela do navegador).  
+
+3. Renderização de `ProdutoItem`:  
+
+    ```tsx
+    // src\app\page.tsx
+
+    ...
+      {produtos.map((produto) => (
+        <ProdutoItem key={ produto.id } produto={ produto } />
+      ))}
+    ```
+
+    - O código usa o método `.map()` para iterar sobre o array `produtos`.  
+    - Para cada item em `produtos`, é criado um componente `ProdutoItem`, passando o `produto` como uma ***prop*** para o componente, e utilizando o `id` do produto como ***key*** para ajudar o React a gerenciar o DOM de forma eficiente.  
+
+Em resumo, a ***Função Home*** `function Home()` é um componente que exibe uma ***Lista de Produtos*** em um layout de grade, onde cada produto é renderizado através do componente `ProdutoItem`. O componente usa o ***Tailwind CSS*** para estilizar a interface, garantindo que a ***lista de produtos*** seja organizada em um ***Grid Responsivo*** e com espaçamento adequado.  
+
+Cada produto é representado por um item individual *(`ProdutoItem`)* que recebe o objeto `produto` como uma propriedade. A `key` é usada para ajudar o React a otimizar a renderização de listas.
+
+<div align='center'><img alt='Lista de Componentes' src='./imagens/004.png' /></div>

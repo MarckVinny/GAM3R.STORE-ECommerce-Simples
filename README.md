@@ -24,3 +24,4 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
 - [FRONTEND - Interface Gráfica](./DOCUMENTACAO.md/#frontend---interface-gráfica)
   - [Componente ProdutoItem](./DOCUMENTACAO.md/#componente-produtoitem)
     - [Definindo Parâmetros para o Componente ProdutoItem](./DOCUMENTACAO.md/#definindo-parâmetros-para-o-componente-produtoitem)
+    - [Definindo uma Lista de Componentes](./DOCUMENTACAO.md/#definindo-uma-lista-de-componentes)
