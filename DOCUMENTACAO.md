@@ -871,7 +871,7 @@ Cada produto é representado por um item individual *(`ProdutoItem`)* que recebe
 
 [^ Sumário ^](./README.md)
 
-### Definindo um Layout Boxed
+## Definindo um Layout Boxed
 
 Um ***layout boxed*** *(ou **layout em caixa**)* é um tipo de design de página em que o conteúdo da página é restrito a uma área centralizada e delimitada por uma borda, geralmente com um espaço vazio ao redor *(margens)*. Em vez de ocupar toda a largura da tela *(como ocorre no **layout full-width**, que preenche toda a largura da janela do navegador)*, o layout boxed mantém o conteúdo de uma página com uma largura fixa e um ***"gutter"*** ou espaçamento nas laterais, criando um efeito de ***"caixa"*** ao redor do conteúdo.  
 
