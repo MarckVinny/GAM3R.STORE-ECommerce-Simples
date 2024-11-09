@@ -131,7 +131,7 @@ Com isso, fizemos as seguintes alterações:
   };
   ```
 
-Com essas alterações, já podemos excluir o diretório `\fonts`que se encontra no caminho `src\app` e todo o conteúdo do diretório `\public` que se encontra na raiz da aplicação.  
+Com essas alterações, já podemos excluir o diretório `\fonts`que se encontra no caminho `src\app` e todo o conteúdo do diretório `\public` que se encontra na raiz da aplicação Frontend.  
 
 >***OBS.:***  
 É para excluir o que tem dentro do diretório e não o diretório, a pasta deve continuar na raiz do projeto.
@@ -976,3 +976,236 @@ Só foi preciso adicionar a Classe Tailwind CSS `container` na `div` do Componen
 Na imagem abaixo podemos observar como está ficando:  
 
 <div align='center'><img alt='imagem5' src='./imagens/005.png' /></div>
+
+[^ Sumário ^](./README.md)
+
+## Definindo Rotas Dinâmicas
+
+Para que nosso `ProdutoItem` funcione nas ***Rotas Dinâmicas*** precisamos converte-lo em um `LINK` e para isso precisamos fazer algumas alterações no arquivo `ProdutoItem.tsx` que se encontra no caminho `src\app\components\produto`.  
+
+```tsx
+// ProdutoItem.tsx
+
+import { Produto } from '@/core'
+import Link from 'next/link'
+
+export interface ProdutoItemProps {
+  produto: Produto
+}
+
+export default function ProdutoItem(props: ProdutoItemProps) {
+  const { produto } = props
+  return (
+    <Link
+      href={`/produto/${props.produto.id}`}
+      className="text-2xl border-2 border-gray-600 rounded-2xl p-4"
+    >
+      {produto.nome}
+    </Link>
+  )
+}
+```
+
+Agora vamos ver o que cada parte alteramos faz:  
+
+### 1. Importações
+
+```tsx
+// ProdutoItem.tsx
+
+import { Produto } from '@/core'
+import Link from 'next/link'
+
+...
+```
+
+- `Produto`:  
+Está sendo importado de `'@/core'`. Presumivelmente, `Produto` é um tipo ou interface que define as propriedades de um produto, como `id`, `nome`, etc.  
+
+- `Link`:  
+Vem da biblioteca `next/link`, que é uma maneira de criar links de navegação entre páginas no Next.js. `Link` permite uma navegação otimizada para Single Page Applications *(SPAs)*.
+
+### 2. Interface `ProdutoItemProps`
+
+```tsx
+// ProdutoItem.tsx
+
+...
+export interface ProdutoItemProps {
+  produto: Produto
+}
+
+...
+```
+
+Aqui, é declarada uma interface chamada `ProdutoItemProps`. Ela define que o componente `ProdutoItem` espera uma propriedade chamada `produto`, que é do tipo `Produto`. O tipo Produto contém informações como `id`, `nome` e outras propriedades relacionadas a um produto.  
+
+### 3. Componente `ProdutoItem`
+
+```tsx
+// ProdutoItem.tsx
+
+...
+export default function ProdutoItem(props: ProdutoItemProps) {
+  const { produto } = props
+  return (
+    <Link
+      href={`/produto/${props.produto.id}`}
+      className="text-2xl border-2 border-gray-600 rounded-2xl p-4"
+    >
+      {produto.nome}
+    </Link>
+  )
+}
+```
+
+- `Declaração do Componente`:  
+`ProdutoItem` é uma função que recebe props do tipo `ProdutoItemProps`. Dentro do componente, ele extrai a propriedade `produto` de `props`.  
+
+- `Elemento Link`:  
+  - O componente retorna um elemento `Link`, que é usado para criar um link de navegação para uma página de detalhes do produto.  
+
+  - O atributo `href` é configurado dinamicamente para apontar para a URL `/produto/${props.produto.id}`, onde `produto.id` é o identificador único do produto. Isso cria um link para a página de detalhes desse produto específico.  
+
+  - ***Estilos:***  
+  O `Link` possui uma série de classes utilitárias do ***Tailwind CSS*** que estilizam o componente:
+  
+    - `text-2xl`:  
+    Define o tamanho da fonte como `2xl` *(muito grande)*.  
+  
+    - `border-2 border-gray-600`:  
+    Aplica uma borda de `2px` de espessura, com a cor cinza-escuro *(`#4b5563`)*.  
+  
+    - `rounded-2xl`:  
+    Aplica bordas arredondadas de `2xl`.  
+
+    - `p-4`:  
+    Aplica um `padding` *(espaçamento interno)* de `1rem` em todos os lados.  
+  
+  - ***Conteúdo do Link***:  
+    Dentro do `Link`, é exibido o nome do produto, acessado via `produto.nome`.
+
+Em resumo, é um componente simples usado para exibir uma lista de produtos, onde cada item é um link para a página de detalhes desse produto específico.  
+Neste ponto, ele está navegando para uma página que ainda não existe, mas, já iremos solucionar esse problema criando a Rota.  
+
+[^ Sumário ^](./README.md)
+
+## Criando uma Rota Dinâmica
+
+No caminho `src\app` qualquer diretório que for criado dentro, podemos criar uma Rota a partir dela, então, crie um diretório `\produto` e dentro iremos criar uma ***Rota Dinâmica*** utilizando o padrão que nomeia o diretório entre colchetes `\[id]` com isso, criamos uma Rota Dinâmica para o `ID` do `ProdutoItem`, agora, dentro da rota que acabamos de criar, crie o arquivo `page.tsx`.  
+
+> ***NOTA:***
+> ___
+> Não se esqueça que pode usar o atalho de criar o diretório e o arquivo de uma só vez.  
+> Clique em criar ***Novo Arquivo*** e digite: `produto\[id]\page.tsx` e pronto, tudo criado.  
+<p>
+
+```tsx
+// page.tsx
+
+import { produtos } from "@/core"
+
+export default function PaginaProduto(props: any) {
+  const id = +props.params.id
+  const produto = produtos.find((produto) => produto.id === id)
+  return (
+    <div className="flex items-center justify-center h-screen">
+      <div className="text-2xl border-2 border-gray-600 rounded-2xl p-4">
+        <h1>Produto: {produto?.nome}</h1>
+      </div>
+    </div>
+  )
+}
+
+
+```
+
+> [!WARNING]
+> Quando utilizamos `(props: any)` como parâmetro, o ***ESLint*** exibe um alerta de que não pode ser usado, então vamos desativar essa regra no arquivo que se encontra na raiz da aplicação Frontend `.eslintrc.json` e adicionaremos a seguinte regra: `"rules": { "@typescript-eslint/no-explicit-any": "off" }`.
+
+<br>
+
+```JSON
+// .eslintrc.json
+
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off"
+  }
+}
+```
+
+Como observamos acima, ***Função*** `PaginaProduto` é um ***Componente React*** que renderiza uma página para exibir informações sobre um ***produto específico*** com base no `ID` passado como parâmetro na URL.  
+Vamos descrever seu funcionamento detalhadamente:
+
+## Descrição do Componente
+
+### 1. Importação de Dados
+
+- `import { produtos } from "@/core"`:  
+A função importa um ***array*** `produtos` do arquivo `constants\produtos.ts` dentro do diretório `\core`. Esse array contém ***objetos de produto***, e cada produto possui um ***ID único*** e outras propriedades *(como `nome`, `preço`, etc.)*.  
+
+### 2. Função do Componente
+
+- O componente é definido como uma função que recebe `props` (provavelmente passadas pelo Next.js ou pelo React Router) e retorna JSX para renderizar o conteúdo.  
+
+### 3. Recuperação do ID do Produto
+
+- `const id = +props.params.id`:  
+A função acessa o `id` do produto a partir das `params` que estão nas propriedades `props`. A conversão `+` é usada para garantir que o ID seja tratado como um número *(caso venha como string)*.  
+
+### 4. Busca do Produto
+
+- `const produto = produtos.find((produto) => produto.id === id)`:  
+Em seguida, o componente usa o método `find` para buscar o produto correspondente ao `id` informado. O `find` retorna o primeiro produto que tem o mesmo `ID`. Caso não encontre, produto será `undefined`.  
+
+### 5. Renderização do JSX
+
+- A função retorna um ***JSX*** com a estrutura de uma página. Ela renderiza uma `div` centralizada na tela com:  
+  - ***Título:***  
+  Um título `Produto: {produto?.nome}`. O `?`. é utilizado para garantir que, caso `produto` seja `undefined` *(quando não encontrado)*, não haja erro ao tentar acessar a propriedade nome.  
+
+  - ***Estilo:***  
+  A `div` tem classes de estilo do ***Tailwind CSS***, como `flex`, `items-center`, `justify-center`, `h-screen`, entre outras, que garantem que o conteúdo será centralizado na tela e com um design simples *(borda, espaçamento, etc.)*.  
+
+Resumindo, este componente recebe um ***id de produto*** via parâmetros da URL, encontra o ***produto correspondente*** a esse id no ***array produtos*** e renderiza o nome do produto em uma página centralizada. Se o produto não for encontrado, o comportamento atual não mostra nenhuma mensagem de erro, o que será melhorado mais adiante.
+
+Agora como podemos observar na imagem abaixo, quando clicamos em um produto da Lista de Produtos, somos enviados para a página referente ao produto clicado, e tudo isso graças a Rota Dinâmica que acabamos de criar.
+
+<div align='center'><img alt='rota dinâmica' src='./imagens/006.png' /></div>
+
+[^ Sumário ^](./README.md)
+
+## Adicionando uma Cor ao Tema do Tailwind CSS
+
+Agora veremos como adicionar uma cor personalizada ao Tema do ***Tailwind CSS*** para poder utilizar na aplicação.  
+Para isso, precisamos editar o arquivo `tailwind.config.ts` que se encontra na raiz da aplicação Frontend.
+
+```ts
+// tailwind.config.ts
+
+...
+  theme: {
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        'violet-dark': {
+          // DEFAULT: "#0E001D",
+          DEFAULT: '#10041f',
+          foreground: '#FFF',
+        },
+      },
+    },
+  },
+...
+```
+
+Como podemos observar dentro de `theme:` o estendemos `extend:` e editamos as cores `colors` adicionando nossa cor personalizada `violet-dark`, deixando como cor padrão do background a cor `DEFAULT: "#0E001D"` e para o texto a cor `foreground: "#FFF"` e com essa configuração, quando estivermos programando o VSCode completará o nome da cor.  
+
+Agora vamos editar o arquivo `ProdutoItem.tsx` adicionando a cor de background `bg-violet-dark` que acabamos de criar ao `ClassName` do componente.  
+
+<div align='center'><img alt='background violet-dark' src='./imagens/007.png' /></div>
+
+Como pode ser observado, o tom da cor é bem escuro quase igual ao tema dark do Chrome, mas dá pra perceber uma pequena diferença no tom, posteriormente essa cor será modificada.
