@@ -29,3 +29,5 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
     - [Definindo Rotas Dinâmicas](./DOCUMENTACAO.md/#definindo-rotas-dinâmicas)
       - [Criando uma Rota Dinâmica](./DOCUMENTACAO.md/#criando-uma-rota-dinâmica)
     - [Adicionando uma Cor ao Tema do Tailwind CSS](./DOCUMENTACAO.md/#adicionando-uma-cor-ao-tema-do-tailwind-css)
+    - [Exibindo Imagem na Aplicação](./DOCUMENTACAO.md/#exibindo-imagem-na-aplicação)
+      - [Corrigindo o Erro de Exibição de Imagem](./DOCUMENTACAO.md/#corrigindo-o-erro-de-exibição-de-imagem)

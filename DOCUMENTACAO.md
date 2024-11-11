@@ -1209,3 +1209,115 @@ Agora vamos editar o arquivo `ProdutoItem.tsx` adicionando a cor de background `
 <div align='center'><img alt='background violet-dark' src='./imagens/007.png' /></div>
 
 Como pode ser observado, o tom da cor é bem escuro quase igual ao tema dark do Chrome, mas dá pra perceber uma pequena diferença no tom, posteriormente essa cor será modificada.
+
+[^ Sumário ^](./README.md)
+
+## Exibindo Imagem na Aplicação
+
+Para que possamos exibir as imagens dos produtos que estão cadastras no arquivo `src\core\constants\produtos.ts`, precisamos realizar algumas configurações no projeto.  
+primeiro vamos adicionar uma imagem sem realizar a configuração para que possamos observar o erro.  
+
+```tsx
+// ProdutoItem.tsx
+
+import { Produto } from '@/core'
+import Image from 'next/image'
+import Link from 'next/link'
+
+export interface ProdutoItemProps {
+  produto: Produto
+}
+
+export default function ProdutoItem(props: ProdutoItemProps) {
+  const { produto } = props
+  return (
+    <Link
+      href={`/produto/${props.produto.id}`}
+      className="text-2xl border-2 bg-violet-dark border-gray-600 rounded-2xl p-4"
+    >
+      <div className="w-full h-48 relative">
+        <Image
+          src={produto.imagem}
+          fill
+          className='object-contain'
+          alt='Imagem Produto'
+        />        
+      </div>
+      {produto.nome}
+    </Link>
+  )
+}
+```
+
+### Descrição do Código
+
+O código acima renderiza uma imagem dentro de um `div` com largura completa (`w-full`) e altura fixa de 48 unidades (`h-48`). Utiliza-se o componente `Image` para exibir a imagem do produto, ocupando todo o espaço disponível do `div` devido ao uso da propriedade `fill`. A classe `object-contain` é aplicada para garantir que a imagem mantenha suas proporções, ajustando-se dentro do contêiner.
+
+```tsx
+<div className="w-full h-48 relative">
+  <Image
+    src={produto.imagem}
+    fill
+    className='object-contain'
+    alt='Imagem Produto'
+  />        
+</div>
+```
+
+### Explicação dos Atributos
+
+- `w-full`:  
+Define que a largura do contêiner será de 100% do elemento pai.  
+
+- `h-48`:  
+Define a altura do contêiner como 48 unidades (tailwindcss).  
+
+- `relative`:  
+A classe relative permite o posicionamento absoluto do conteúdo interno em relação a este contêiner.  
+
+- `fill`:  
+Permite que a imagem preencha todo o contêiner div.  
+
+- `object-contain`:  
+Garante que a imagem seja redimensionada proporcionalmente dentro do contêiner.  
+
+- `alt`:  
+Texto alternativo para a imagem, importante para acessibilidade.  
+
+Quando adicionamos uma imagem na Aplicação sem a devida configuração, a mensagem de erro abaixo será exibida:  
+
+<div align='center'><img alt='Erro' src='./imagens/008.png' /></div>
+<br>
+
+[^ Sumário ^](./README.md)
+
+### Corrigindo o Erro de Exibição de Imagem
+
+Para que as imagens do Projeto possam ser exibidas, precisamos liberar o caminho da imagem que está no Firebase `firebasestorage.googleapis.com` na Aplicação Nextjs.  
+
+Então, precisamos editar o arquivo `next.config.ts` que se encontra na rais da aplicação Frontend.  
+Precisamos adicionar os atributos: `images:`, `remotePatterns:`,  `protocol:` *(somente o protocolo Ex.: `https` sem `://` )* e `hostname:`*(contendo o caminho `firebasestorage.googleapis.com`)*.  
+
+```ts
+// next.config.ts
+
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        // hostname: '**', //* Libera qualquer URL
+        hostname: 'firebasestorage.googleapis.com',
+      },
+    ],
+  },
+}
+
+export default nextConfig;
+```
+
+Com essa alteração realizada as imagens já podem ser exibidas na aplicação, como podemos observar na imagem abaixo:  
+
+<div align='center'><img alt='Imagem Produto' src='./imagens/009.png' /></div>
