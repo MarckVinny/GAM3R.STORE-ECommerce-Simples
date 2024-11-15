@@ -35,3 +35,5 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
       - [Nome do Produto](./DOCUMENTACAO.md/#nome-do-produto)
       - [Especificação em Destaque](./DOCUMENTACAO.md/#especificação-em-destaque)
       - [Preço do Produto](./DOCUMENTACAO.md/#preço-do-produto)
+      - [Exibindo Notas de Review](./DOCUMENTACAO.md/#exibindo-notas-de-review)
+      - [Adicionando NotaReview ao ProdutoItem](./DOCUMENTACAO.md/#adicionando-notareview-ao-produtoitem)

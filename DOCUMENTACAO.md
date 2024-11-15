@@ -1042,7 +1042,7 @@ export default function ProdutoItem(props: ProdutoItemProps) {
   return (
     <Link
       href={`/produto/${props.produto.id}`}
-      className="text-2xl border-2 border-gray-600 rounded-2xl p-4"
+      className="flex flex-col border-2 bg-violet-dark border-cyan-400/30 rounded-2xl relative max-w-[350px]"
     >
       {produto.nome}
     </Link>
@@ -1095,7 +1095,7 @@ export default function ProdutoItem(props: ProdutoItemProps) {
   return (
     <Link
       href={`/produto/${props.produto.id}`}
-      className="text-2xl border-2 border-gray-600 rounded-2xl p-4"
+      className="flex flex-col border-2 bg-violet-dark border-cyan-400/30 rounded-2xl relative max-w-[350px]"
     >
       {produto.nome}
     </Link>
@@ -1487,3 +1487,130 @@ O ***Botão Adicionar*** será exibido na cor violeta escuro `bg-violet-700` com
 Como podemos observar na imagem abaixo, temos uma área marcada em laranja, esse é o espaço que será ajustado quando houver necessidade.  
 
 <div align='center'><img alt='espaço ajustado' src='./imagens/010.png' /></div>
+
+[^ Sumário ^](./README.md)
+
+## Exibindo Notas de Review
+
+Neste momento, iremos criar um componente que irá exibir as ***Notas de Review*** do produto. Essas notas, serão representadas por ***5 estrelas*** que serão exibidas no lado superior direito da imagem de cada produto.
+Nossa página inicial deverá estar parecida com a imagem abaixo quando terminar-mos, note as estrelas, esse será nosso passo atual.  
+
+<div align='center'><img alt='estrelas' src='./imagens/011.png' /></div>
+
+<br>
+
+Agora, no caminho `src\app\components` crie um novo diretório `\shared` *(compartilhado)* e crie um arquivo `NotasReview.tsx`.  
+
+> **ATALHO:**
+> ___
+> *Crie um novo arquivo `shared\NotasReview.tsx` que irá criar o diretório e o arquivo ao mesmo tempo.*
+
+<br>
+
+O ***componente NotaReview*** exibe uma avaliação por estrelas com base em uma nota passada como propriedade. Ele usa ***ícones de estrelas*** importados para representar a avaliação visualmente, permitindo ***estrelas inteiras***, ***metade de estrelas*** ou ***estrelas vazias***, conforme o valor da nota.  
+Agora vamos analisar o código:
+
+```tsx
+// NotasReview.tsx
+
+import { IconStar, IconStarFilled, IconStarHalfFilled } from '@tabler/icons-react'
+
+export interface NotaReviewProps {
+    nota: number
+    tamanho?: number
+}
+
+export default function NotaReview(props: NotaReviewProps) {
+    function notaParaEstrelas(nota: number) {
+        const estrelas = []
+        for (let i = 1; i <= 5; i++) {
+            if (nota >= i) {
+                estrelas.push(<IconStarFilled size={props.tamanho ?? 12} />)
+            } else if (nota >= i - 0.5) {
+                estrelas.push(<IconStarHalfFilled size={props.tamanho ?? 12} />)
+            } else {
+                estrelas.push(<IconStar size={props.tamanho ?? 12} />)
+            }
+        }
+        return estrelas
+    }
+
+    return <div className="flex gap-0.5 text-emerald-400">{notaParaEstrelas(props.nota)}</div>
+}
+```
+
+## Explicação dos Atributos e Funções
+
+- ***Propriedades*** (`NotaReviewProps`):
+
+  - ***nota***:  
+  Define a ***Nota da Avaliação***, variando de `0` a `5`.  
+
+  - ***tamanho?***:  
+  ***Opcional***, define o ***tamanho dos ícones*** das estrelas. Se não for fornecido, o tamanho padrão é `12`.
+
+- ***Função `notaParaEstrelas`***:  
+Recebe a ***nota*** e converte em um ***array de ícones*** de estrelas, baseado nas seguintes condições:  
+
+- ***Estrela cheia (`IconStarFilled`)***:  
+Adicionada ao ***array*** `se` a ***nota*** `for igual ou maior` que o valor inteiro correspondente à posição da estrela.  
+
+- ***Meia estrela (`IconStarHalfFilled`)***:  
+Adicionada se a ***nota*** estiver entre um `valor inteiro` e o `meio do próximo`.  
+
+- ***Estrela vazia (`IconStar`)***:  
+Adicionada se a ***nota*** for menor que o valor da posição atual da estrela.  
+
+Esta função gera um array de 5 elementos, representando a avaliação visual.  
+
+### Classe className do Contêiner Principal
+
+O contêiner que exibe as estrelas possui as seguintes classes:
+
+- `flex`:  
+Organiza as estrelas em linha usando o ***layout Flexbox***.  
+
+- `gap-0.5`:  
+Define um espaçamento de 0.5 unidade entre cada estrela, para melhorar a aparência visual.  
+
+- `text-emerald-400`:  
+Define a cor das estrelas em um tom de verde esmeralda.
+
+O componente `NotaReview` é útil para exibir avaliações em uma interface de usuário, variando entre estrelas cheias, meias estrelas e estrelas vazias. Ele pode ser utilizado em páginas de produtos ou avaliações para representar visualmente uma média de nota.
+
+[^ Sumário ^](./README.md)
+
+### Adicionando NotaReview ao ProdutoItem
+
+Para que possamos posicionar um item de forma `absoluta` é preciso que o ***Elemento Pai*** seja definido de forma `relativa` que em nosso caso é o Componente `LINK`.
+
+```tsx
+// src\app\components\produto\ProdutoItem.tsx
+
+    ...
+    <Link
+      href={`/produto/${props.produto.id}`}
+      className="
+      flex flex-col border-2 bg-violet-dark border-cyan-400/30 
+      rounded-2xl relative max-w-[350px]
+      "
+    >
+      ...
+```
+
+Para exibir o Componente que acabamos de definir precisamos adiciona-lo acima da imagem do produto.  
+
+```tsx
+// src\app\components\produto\ProdutoItem.tsx
+
+      ...
+      <div className="flex absolute justify-end top-2.5 right-2.5">
+        <NotaReview nota={produto.nota} />
+      </div>
+      ...
+```
+
+Com isso, adicionamos as estrelas de forma absoluta no lado superior direito com 10px de margem tanto no topo quando no lado esquerdo.  
+Abaixo podemos verificar como a página está ficando:  
+
+<div align='center'><img alt='nota de revisão' src='./imagens/012.png' /></div>
