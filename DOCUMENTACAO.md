@@ -965,13 +965,57 @@ Agora que temos nossa área ***Boxed*** definida, podemos utilizar em nossa pág
 ```tsx
 // page.tsx
 
-...
-    <div className="grid grid-cols-4 container items-center justify-center space-y-2 space-x-2 mt-5 h-screen">
-...
+    ...
+    <div className="flex-1 flex flex-col container gap-5 py-10">
+      ...
+    </div>
+    ...
 
 ```
 
-Só foi preciso adicionar a Classe Tailwind CSS `container` na `div` do Componente `ProdutoItem` que a página foi renderizada como esperado, só houve mais um pequeno ajuste na margem top para ficar um pouco melhor `mt-5` aplicando uma margem de 20px.
+Agora, vamos envolver o Componente `ProdutoItem` com uma `div` contendo a Classe Tailwind CSS `container` que acabamos de criar, juntamente com as Classes `flex flex-1 flex-col` para que os Componentes sejam distribuídos em colunas `gap-5` para ter um espaço de 20px entre os Componentes e `py-10` para ter um padding no topo e na base de 40px, até aqui o código está desta forma:
+
+```tsx
+// src/app/page.tsx
+
+import { produtos } from "@/core";
+import ProdutoItem from "./components/produto/ProdutoItem";
+
+export default function Home() {
+  return (
+    <div className="flex flex-1 flex-col container gap-5 py-10">
+      <div className="grid grid-cols-4 gap-5">
+        {produtos.map((produto) => (
+          <ProdutoItem key={produto.id} produto={produto} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+```
+
+### Explicação das Classes className
+
+- `flex`:  
+Define o ***contêiner*** como um elemento flexível, utilizando o modelo de ***layout Flexbox***.  
+
+- `flex-1`:  
+Faz com que o elemento ocupe o máximo de espaço disponível, dividindo-o igualmente com outros elementos que também tenham ***flex-1***.  
+
+- `flex-col`:  
+Define a direção do layout como ***coluna***, organizando os ***elementos filhos*** verticalmente.  
+
+- `container`:  
+Utiliza a ***largura máxima*** definida pela classe container, ***centralizando*** o conteúdo horizontalmente na página.  
+
+- `gap-5`:  
+Define um espaço ***(gap)*** de 5 unidades entre os elementos filhos do contêiner.  
+
+- `py-10`:  
+Adiciona um ***padding de 10 unidades*** verticalmente *(**py**, para `padding-top` e `padding-bottom`)*, criando um espaçamento interno na parte superior e inferior do contêiner.
+
+Essas classes `className` ajudam a organizar a lista de produtos em uma coluna, com espaçamento interno e entre os itens. Utilizar `flex-col` dentro de um contêiner `flex` permite que os itens sejam organizados ***verticalmente***. O espaçamento ***interno*** e ***externo*** cria um layout mais espaçado e organizado.
 
 Na imagem abaixo podemos observar como está ficando:  
 
@@ -1116,8 +1160,6 @@ export default function PaginaProduto(props: any) {
     </div>
   )
 }
-
-
 ```
 
 > [!WARNING]
@@ -1321,3 +1363,127 @@ export default nextConfig;
 Com essa alteração realizada as imagens já podem ser exibidas na aplicação, como podemos observar na imagem abaixo:  
 
 <div align='center'><img alt='Imagem Produto' src='./imagens/009.png' /></div>
+
+[^ Sumário ^](./README.md)
+
+## Exibindo Informações do Produto
+
+As informações do produto, serão exibidas em diversas `div` uma embaixo da outra, a seguir, veremos como ficará o código.
+
+## Nome do Produto
+
+Para o ***Nome do Produto***, iremos dividir a `div` com uma borda no topo com 2px de espessura `border-t-2` para separar visualmente a imagem das informações do produto e em seguida exibimos o nome do produto `{produto.nome}` em um `span`, como podemos ver a seguir.  
+
+```tsx
+// ProdutoItem.tsx
+
+      ...
+      <div className="flex flex-1 flex-col gap-3 p-5 border-t-2 border-cyan-400/30">
+        <span className="text-lg font-semibold">{produto.nome}</span>
+      </div>
+      ...
+```
+
+[^ Sumário ^](./README.md)
+
+## Especificação em Destaque
+
+O ***destaque*** será exibido no inicio da linha `self-start`, com uma fonte pequena `text-sm`, comm uma linha tracejada na parte de baixo `border-b border-dashed`, como podemos ver a seguir.
+
+```tsx
+// ProdutoItem.tsx
+
+        ...
+        <span className="self-start text-sm border-b border-dashed">
+          {produto.especificacoes.destaque}
+        </span>
+        ...
+```
+
+Logo abaixo vamos adicionar uma `div` contendo somente a classe `flex-1` para que se ajuste crescendo ou diminuindo quando necessário para que crie um espaço entre o Destaque e o valor, para que os botões fiquem sempre alinhados na base.
+
+```tsx
+// ProdutoItem.tsx
+
+        ...
+        <div className="flex-1"></div>
+        ...
+```
+
+[^ Sumário ^](./README.md)
+
+## Preço do Produto
+
+Para poder exibir o ***Preço Base*** e o ***Preço Promocional*** precisamos criar uma `div` com as Classes `flex flex-col` para que fique um ao lado do outro.  
+
+### 1. Preço Base
+
+O ***Preço Base*** será exibido dentro de um `span` com fonte pequena `text-sm` com uma cor cinza de menos destaque `text-gray-400` e com um risco no meio do texto `line-through`, por fim, será formatado com a ***Classe Utilitária*** `Moeda` criada no ***Core da Aplicação*** `{Moeda.formatar(produto.precoBase)}` e não esquecendo de importar a Classe Moeda `import { Moeda, Produto } from '@/core'`.
+
+```tsx
+// ProdutoItem.tsx
+
+import { Moeda, Produto } from '@/core'
+
+        ...
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-400 line-through">
+            de {Moeda.formatar(produto.precoBase)}
+          </span>
+          ...
+        </div>
+        ...
+```
+
+### 2. Preço Promocional
+
+O ***Preço Promocional,*** será exibido dentro de um `span` com uma fonte maior `text-xl` de peso 600 `font-semibold` com a cor verde claro `text-emerald-400`, logo abaixo do `Preço Base`, como podemos observar no trecho de código abaixo.
+
+```tsx
+// ProdutoItem.tsx
+
+        ...
+        <div className="flex flex-col">
+          ...
+          <div className="text-xl semibold text-emerald-400">
+            por {Moeda.formatar(produto.precoPromocional)}
+          </div>
+          ...
+        </div>
+        ...
+```
+
+### 3. Botão Adicionar
+
+O ***Botão Adicionar*** será exibido na cor violeta escuro `bg-violet-700` com altura de 32px `h-8` o efeito de passar o mouse por cima exibirá o contorno com 2px de espessura na cor verde claro `hover: border-2 border-emerald-500` com os cantos arredondados 100% `rounded-full` com um ícone e o texto "Adicionar" centralizados `flex justify-center items-center` e espaçados `gap-2`, sem esquecer de importar o ícone do carrinho de compras`import { IconShoppingCartPlus } from '@tabler/icons-react'`, como podemos ver abaixo.  
+
+> ***NOTA:***
+> ___
+> Como o botão precisa do evento `onClick` para funcionar, precisamos adicionar antes dos imports `'use client'` para que não seja exibido um erro na tela, pois o evento de click funciona do lado do cliente (no navegador).  
+<p>
+
+```tsx
+// ProdutoItem.tsx
+
+        ...
+        <div className="flex flex-col">
+          ...
+          <button
+            className="flex justify-center items-center gap-2 h-8 bg-violet-700 hover:border-2 border-emerald-500 rounded-full"
+            onClick={((e) => {
+              e.preventDefault()
+              console.log('Produto Adicionado')
+              // adicionarItem(produto)
+            })}
+          >
+            <IconShoppingCartPlus size={20} />
+            <span>Adicionar</span>
+          </button>
+          ...
+        </div>
+        ...
+```
+
+Como podemos observar na imagem abaixo, temos uma área marcada em laranja, esse é o espaço que será ajustado quando houver necessidade.  
+
+<div align='center'><img alt='espaço ajustado' src='./imagens/010.png' /></div>

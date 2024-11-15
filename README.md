@@ -31,3 +31,7 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
     - [Adicionando uma Cor ao Tema do Tailwind CSS](./DOCUMENTACAO.md/#adicionando-uma-cor-ao-tema-do-tailwind-css)
     - [Exibindo Imagem na Aplicação](./DOCUMENTACAO.md/#exibindo-imagem-na-aplicação)
       - [Corrigindo o Erro de Exibição de Imagem](./DOCUMENTACAO.md/#corrigindo-o-erro-de-exibição-de-imagem)
+    - [Exibindo Informações do Produto](./DOCUMENTACAO.md/#exibindo-informações-do-produto)
+      - [Nome do Produto](./DOCUMENTACAO.md/#nome-do-produto)
+      - [Especificação em Destaque](./DOCUMENTACAO.md/#especificação-em-destaque)
+      - [Preço do Produto](./DOCUMENTACAO.md/#preço-do-produto)
