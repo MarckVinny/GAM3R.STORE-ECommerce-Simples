@@ -1513,29 +1513,31 @@ Agora vamos analisar o código:
 ```tsx
 // NotasReview.tsx
 
-import { IconStar, IconStarFilled, IconStarHalfFilled } from '@tabler/icons-react'
+import { IconStar, IconStarFilled, IconStarHalfFilled } from "@tabler/icons-react"
 
 export interface NotaReviewProps {
-    nota: number
-    tamanho?: number
+  nota: number
+  tamanho?: number
+  produtoId: number
 }
 
 export default function NotaReview(props: NotaReviewProps) {
-    function notaParaEstrelas(nota: number) {
-        const estrelas = []
-        for (let i = 1; i <= 5; i++) {
-            if (nota >= i) {
-                estrelas.push(<IconStarFilled size={props.tamanho ?? 12} />)
-            } else if (nota >= i - 0.5) {
-                estrelas.push(<IconStarHalfFilled size={props.tamanho ?? 12} />)
-            } else {
-                estrelas.push(<IconStar size={props.tamanho ?? 12} />)
-            }
-        }
-        return estrelas
+  function notaParaEstrelas(nota: number) {
+    const estrelas = []
+    for (let i = 1; i <= 5; i++) {
+      //* Gera uma chave única combinando ID do produto e o índice.
+      const key = `${props.produtoId}-${i}`
+      if (nota >= i) {
+        estrelas.push(<IconStarFilled key={key} size={props.tamanho ?? 12} />)
+      } else if (nota >= i - 0.5) {
+        estrelas.push(<IconStarHalfFilled key={key} size={props.tamanho ?? 12} />)
+      } else {
+        estrelas.push(<IconStar key={key} size={props.tamanho ?? 12} />)
+      }
     }
-
-    return <div className="flex gap-0.5 text-emerald-400">{notaParaEstrelas(props.nota)}</div>
+    return estrelas
+  }
+  return <div className="flex gap-0.5 text-emerald-400">{notaParaEstrelas(props.nota)}</div>
 }
 ```
 
@@ -1547,7 +1549,10 @@ export default function NotaReview(props: NotaReviewProps) {
   Define a ***Nota da Avaliação***, variando de `0` a `5`.  
 
   - ***tamanho?***:  
-  ***Opcional***, define o ***tamanho dos ícones*** das estrelas. Se não for fornecido, o tamanho padrão é `12`.
+  ***Opcional***, define o ***tamanho dos ícones*** das estrelas. Se não for fornecido, o tamanho padrão é `12`.  
+
+  - ***produtoId***:  
+  Define o ***ID do produto***, necessário para gerar as chaves `key`únicas.
 
 - ***Função `notaParaEstrelas`***:  
 Recebe a ***nota*** e converte em um ***array de ícones*** de estrelas, baseado nas seguintes condições:  
@@ -1605,12 +1610,14 @@ Para exibir o Componente que acabamos de definir precisamos adiciona-lo acima da
 
       ...
       <div className="flex absolute justify-end top-2.5 right-2.5">
-        <NotaReview nota={produto.nota} />
+        <NotaReview produtoId={produto.id} nota={produto.nota} />
       </div>
       ...
 ```
 
-Com isso, adicionamos as estrelas de forma absoluta no lado superior direito com 10px de margem tanto no topo quando no lado esquerdo.  
+Com isso, adicionamos as estrelas de forma absoluta no lado superior direito com 10px de margem tanto no topo quando no lado direito.  
 Abaixo podemos verificar como a página está ficando:  
 
 <div align='center'><img alt='nota de revisão' src='./imagens/012.png' /></div>
+
+1:17

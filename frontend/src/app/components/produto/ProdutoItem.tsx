@@ -20,7 +20,7 @@ export default function ProdutoItem(props: ProdutoItemProps) {
       "
     >
       <div className="flex absolute justify-end top-2.5 right-2.5">
-        <NotaReview nota={produto.nota} />
+        <NotaReview produtoId={produto.id} nota={produto.nota} />
       </div>
       <div className="w-full h-48 relative">
         <Image
