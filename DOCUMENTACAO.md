@@ -562,7 +562,7 @@ Por enquanto o Core da Aplicação está finalizado para que possamos começar e
 
 Agora iremos iniciar a programação da ***Interface Gráfica*** a parte visual da aplicação.  
 
-### Componente ProdutoItem
+### Componente Card ProdutoItem
 
 Inicialmente irenos implementar o ***Item do Produto*** e para isso, vamos criar um Componente chamado ***ProdutoItem***, então, no caminho `src\app` crie um diretório `\components` depois crie outro diretório `\produto` e dentro crie o arquivo `ProdutoItem.tsx`.  
 
@@ -1619,5 +1619,1126 @@ Com isso, adicionamos as estrelas de forma absoluta no lado superior direito com
 Abaixo podemos verificar como a página está ficando:  
 
 <div align='center'><img alt='nota de revisão' src='./imagens/012.png' /></div>
+<br>
 
-1:17
+[^ Sumário ^](./README.md)
+
+## Criando o Layout da Aplicação
+
+Agora iremos definir o ***Layout da Aplicação*** onde teremos o Cabeçalho, Body, Rodapé e o que mais for necessário adicionar na aplicação.  
+
+Mas antes de tudo, precisamos importar as imagens para o nosso projeto *(background.png, logo.png e logo-texto.png)* esses arquivos serão salvos no caminho `public\` que se encontra na raiz da Aplicação Frontend.  
+
+[^ Sumário ^](./README.md)
+
+### Componente Logo
+
+O ***componente Logo*** é responsável por exibir a marca visual da Aplicação, com um ícone e um texto de logo, e também funciona como um link para a página inicial. Ele é utilizado para que os usuários possam identificar a identidade visual da Aplicação e, ao clicar, retornem à ***home page***.  
+
+No caminho `src\app\components\` crie um novo diretório `shared\` e um arquivo `Logo.tsx` e para facilitar crie o arquivo e o diretório de uma só vez, como vimos anteriormente.
+
+```tsx
+// Logo.tsx
+
+import Image from 'next/image'
+import Link from 'next/link'
+
+export default function Logo() {
+    return (
+      <Link href="/" className="flex items-center gap-3">
+            <Image src="/logo.png" height={60} width={60} alt="logo" />
+            <Image src="/logo-texto.png" width={230} height={0} alt="logo" />
+        </Link>
+    )
+}
+```
+
+Abaixo, uma explicação de cada parte do código para iniciantes:
+
+***Importações:***
+
+```tsx
+import Image from 'next/image'
+import Link from 'next/link'
+...
+```
+
+- `Image`:  
+Utilizado para carregar e exibir imagens com otimizações automáticas, como carregamento preguiçoso (`lazy loading`).
+
+- `Link`:  
+Usado para navegação interna no Next.js sem recarregar a página.
+
+***Estrutura do Componente:***
+
+```tsx
+...
+export default function Logo() {
+    return (
+        <Link href="/" className="flex items-center gap-3">
+            <Image src="/logo.png" height={60} width={60} alt="logo" />
+            <Image src="/logo-texto.png" width={230} height={0} alt="logo" />
+        </Link>
+    )
+}
+```
+
+***Link:***  
+
+Envolve as imagens, tornando todo o componente clicável.  
+O atributo `href="/"` define que o link levará o usuário para a página inicial.  
+
+A classe `flex items-center gap-3`:  
+
+- `flex`: Alinha as imagens horizontalmente.
+- `items-center`: Centraliza verticalmente as imagens.  
+- `gap-3`: Adiciona um espaço entre o ícone e o texto.  
+
+***Imagens:***
+
+Primeira imagem (`/logo.png`):  
+
+- Representa o ícone da logo.
+- Largura e altura fixas de 60px.
+
+Segunda imagem (`/logo-texto.png`):  
+
+- Contém o texto do logotipo.
+- Largura fixa de `230px`, mas altura definida como `0` para evitar distorções *(altura será ajustada automaticamente pelo Next.js)*.
+
+***Alt:***
+
+Fornece texto alternativo para acessibilidade *(lê-se quando a imagem não carrega ou por leitores de tela)*.
+
+[^ Sumário ^](./README.md)
+
+### Componente IconeCarrinho
+
+O componente `IconeCarrinho` é um ***Ícone de Carrinho de Compras*** que exibe a quantidade de itens dentro dele. É ideal para ser utilizado em cabeçalhos de sites ou interfaces de e-commerce, onde o usuário pode ver a quantidade de produtos adicionados ao carrinho.  
+
+No caminho `src\app\components\` crie um novo diretório `shared\` e um arquivo `IconeCarrinho.tsx` e para facilitar crie o arquivo e o diretório de uma só vez, como vimos anteriormente.
+
+```tsx
+// IconCarrinho.tsx
+
+import { IconShoppingCart } from '@tabler/icons-react'
+
+export interface IconeCarrinhoProps {
+    qtdeItens: number
+}
+
+export default function IconeCarrinho(props: IconeCarrinhoProps) {
+    return (
+        <div className="flex justify-center items-center rounded-full w-14 h-14 bg-violet-dark relative">
+            <IconShoppingCart size={30} stroke={1.3} />
+            <div className="absolute top-2 right-2 bg-violet-600 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+                {props.qtdeItens ?? 0}
+            </div>
+        </div>
+    )
+}
+```
+
+***Estrutura do Componente:***
+
+O componente recebe as seguintes propriedades:
+
+- ***qtdeItens (obrigatório)***:  
+Indica a quantidade de itens no carrinho. Se nenhum valor for passado, o componente exibirá `0` como padrão.  
+
+***Funcionamento:***
+
+- O ícone principal do carrinho é representado pelo componente `IconShoppingCart`, importado da biblioteca `@tabler/icons-react`.  
+
+- Um pequeno contador no canto superior direito do carrinho exibe a ***quantidade de itens***, estilizado para parecer uma etiqueta redonda.  
+
+***Implementação:***
+
+A seguir, uma explicação detalhada para cada parte do código:
+
+***1. Contêiner Principal (`div`):***
+
+- ***Estilizado com***:  
+
+  - `flex`:  
+  Posiciona os itens no centro com Flexbox.
+  - `justify-center` e `items-center`:  
+  Alinha o ícone no centro do contêiner.
+  - `rounded-full`:  
+  Dá um formato redondo ao contêiner.
+  - `w-14 h-14`:  
+  Define largura e altura fixas de 56px.
+  - `bg-violet-dark`:  
+  Aplica um fundo na cor roxa escura.
+  - `relative`:  
+  Permite que o contador seja posicionado dentro do contêiner.  
+
+***2. Ícone do Carrinho (`IconShoppingCart`):***
+
+- `size={30}`:  
+Define o tamanho do ícone em `30px`.
+- `stroke={1.3}`:  
+Controla a espessura das linhas do ícone.
+
+***3. Contador de Itens:***
+
+- Posicionado no canto superior direito com `absolute` `top-2` `right-2`.
+
+- ***Estilizado como:***
+
+  - `bg-emerald-400`: Fundo verde esmeralda.
+  - `text-white`: Texto branco.
+  - `text-xs font-semibold`: Texto pequeno e em negrito.
+  - `rounded-full`: Formato redondo.
+  - `w-5 h-5`: Tamanho fixo de `20px`.
+  - `flex items-center justify-center`: Centraliza o número dentro do círculo.
+
+> [!IMPORTANT]
+> ***Propriedades (`props`)***:  
+> No React, as propriedades permitem passar dados de um componente pai para um componente filho.  
+> Aqui, `qtdeItens` é uma propriedade usada para mostrar a quantidade de itens no carrinho.  
+> ***Flexbox (`flex`)***:  
+> Usado para alinhar o conteúdo dentro de contêineres de maneira fácil.  
+> ***Classes CSS do Tailwind***:  
+> As classes adicionam estilos pré-definidos ao componente. No caso, usamos `rounded-full` para bordas arredondadas e `relative` para posicionar o contador dentro do ícone.
+
+<BR>
+
+[^ Sumário ^](./README.md)
+
+## Componente Cabecalho
+
+O ***Componente Cabecalho*** é responsável por exibir a parte superior da interface da Aplicação. Ele geralmente contém elementos como o ***logotipo***, ***links para páginas importantes*** e um ***ícone*** que mostra a quantidade de itens no carrinho de compras. Esse componente faz parte do layout principal e aparece em todas as páginas.  
+
+***Funcionamento:*** do Componente
+
+O Cabecalho é dividido em três partes principais:
+
+- ***Fundo com gradiente:***  
+O fundo do cabeçalho utiliza um gradiente linear que cria uma transição suave entre três cores diferentes, dando um efeito visual moderno e elegante.  
+
+- ***Linha de separação:***  
+Há uma linha horizontal decorativa abaixo do cabeçalho para dividir visualmente o topo do resto da página.  
+
+- ***Elementos principais do cabeçalho:***  
+O ***logotipo da empresa***, que serve como um link para a página inicial.  
+Um ***ícone de carrinho de compras***, com a quantidade de itens nele.  
+Um ***link*** que leva o usuário à ***página de checkout*** quando o ícone do carrinho é clicado.
+
+Afora vamos criar o Componente `Cabecalho`, então, no caminho `src\app\components\template\` crie um arquivo `Cabecalho.tsx`.
+
+```tsx
+// Cabecalho.tsx
+
+import Logo from '../shared/Logo'
+import IconeCarrinho from '../shared/IconeCarrinho'
+import Link from 'next/link'
+// import useCarrinho from '@/data/hooks/useCarrinho'
+
+export default function Cabecalho() {
+    const qtdeItens = 0
+    // const { qtdeItens } = useCarrinho()
+    return (
+        <div
+            className="flex flex-col h-20"
+            style={{
+                background: 'linear-gradient(90deg, #14002D 0%, #420093 50%, #14002D 100%)',
+            }}
+        >
+            <div className="flex-1 container flex flex-col justify-center">
+                <div className="flex justify-between items-center">
+                    <Logo />
+                    <Link href="/checkout/carrinho">
+                        <IconeCarrinho qtdeItens={qtdeItens} />
+                    </Link>
+                </div>
+            </div>
+            <div className="h-px bg-gradient-to-r from-violet-600/20 via-violet-600/80 to-violet-600/20"></div>
+        </div>
+    )
+}
+```
+
+### Código Explicado
+
+***Importações***
+
+```tsx
+// Cabecalho.tsx
+
+import Logo from '../shared/Logo'
+import IconeCarrinho from '../shared/IconeCarrinho'
+import Link from 'next/link'
+// import useCarrinho from '@/data/hooks/useCarrinho'
+...
+```
+
+- `Logo`:  
+Um componente reutilizável que exibe o logotipo da empresa.  
+
+- `IconeCarrinho`:  
+Um componente que mostra o ícone do carrinho e a quantidade de itens nele.  
+
+- `Link`:  
+Importado do Next.js, é usado para criar links de navegação interna.  
+
+- `useCarrinho` ***(comentado)***:  
+Um hook personalizado usado para gerenciar o estado do carrinho, mas está temporariamente desativado.
+
+***Estrutura Principal***
+
+```tsx
+// Cabecalho.tsx
+
+...
+export default function Cabecalho() {
+    const { qtdeItens } = useCarrinho()
+    return (
+        <div
+            className="flex flex-col h-20"
+            style={{
+                background: 'linear-gradient(90deg, #14002D 0%, #420093 50%, #14002D 100%)',
+            }}
+        >
+...
+```
+
+- `useCarrinho()`:  
+Recupera a quantidade de itens no carrinho. É necessário ativar o hook para ele funcionar.  
+
+- ***Container principal (`<div>` com `className="flex flex-col h-20"`)***:  
+Define o cabeçalho com altura fixa de 20 unidades e layout em coluna.  
+Aplica o fundo com gradiente linear.
+
+***Elementos do Cabeçalho***
+
+```tsx
+// Cabecalho.tax
+
+...
+<div className="flex-1 container flex flex-col justify-center">
+    <div className="flex justify-between items-center">
+        <Logo />
+        <Link href="/checkout/carrinho">
+            <IconeCarrinho qtdeItens={qtdeItens} />
+        </Link>
+    </div>
+</div>
+```
+
+- ***Logotipo***:  
+O componente `<Logo />` exibe o logotipo da empresa e redireciona para a página inicial quando clicado.  
+
+- ***Ícone do Carrinho***:  
+O componente `<IconeCarrinho />` recebe a quantidade de itens do carrinho como uma propriedade (`qtdeItens`) e exibe essa quantidade no canto superior direito do ícone.  
+
+- ***Link do Carrinho***:  
+O ícone do carrinho está envolvido em um componente `<Link>` que redireciona o usuário para a página do carrinho (`/checkout/carrinho`) ao clicar.
+
+***Linha de Separação***
+
+```tsx
+// Cabecalho.tsx
+
+...
+<div className="h-px bg-gradient-to-r from-violet-600/20 via-violet-600/80 to-violet-600/20"></div>
+```
+
+Uma linha horizontal com um gradiente de tons violetas.
+Serve como um divisor estético entre o cabeçalho e o conteúdo principal.
+
+***Estilos e Layout***
+
+- ***Classes principais***:
+
+  - `flex`:  
+  Alinha elementos horizontal ou verticalmente.  
+
+  - `flex-col`:  
+  Organiza os elementos verticalmente no container.  
+
+  - `justify-between`:  
+  Distribui o logotipo e o carrinho igualmente nos extremos.  
+
+  - `items-center`:  
+  Centraliza os elementos verticalmente.  
+
+  - `gap`:  
+  Adiciona espaço entre os elementos.
+  
+- ***Gradiente***:
+
+  - `linear-gradient()`:  
+  Criado com a propriedade CSS background.  
+
+  - `(#14002D e #420093)`:  
+  Adiciona transições suaves entre as cores.
+
+> ### PONTOS IMPORTANTES
+>
+> ___
+>
+> ***Componentes Reutilizáveis:***  
+> O cabeçalho utiliza componentes pequenos como `Logo` e `IconeCarrinho`, tornando o código mais organizado e fácil de entender.  
+>
+> ***Hooks Personalizados:***  
+> O ***hook*** `useCarrinho` quando ativado recupera informações do estado do carrinho.  
+>
+> ***Estilo Moderno com Tailwind CSS:***  
+> Classes como `flex` e `bg-gradient-to-r` ajudam a criar um design responsivo e moderno rapidamente.  
+>
+> ***Links Internos:***  
+> O uso de `<Link>` do Next.js melhora a navegação, tornando-a mais rápida e fluida.
+
+<br>
+
+Esse componente é essencial para a navegação e oferece uma experiência visual agradável e funcional para o usuário.  
+
+[^ Sumário ^](./README.md)
+
+## Componente Rodape
+
+O ***Componente Rodape*** `<footer>` cria o rodapé da Aplicação, que geralmente contém ***informações institucionais***, **contato** e ***links para redes sociais***. Ele organiza essas informações de forma visualmente agradável, usando estilos do ***TailwindCSS*** para garantir uma aparência moderna e responsiva.
+
+Agora criaremos o Componente `Rodape` que irá conter a estrutura de um Rodapé, para isso, no caminho `src\app\components\template\` crie um arquivo `Rodape.tsx`.
+
+```tsx
+// Rodape.tsx
+
+import {
+    IconBrandFacebook,
+    IconBrandInstagram,
+    IconBrandLinkedin,
+    IconBrandWhatsapp,
+    IconBrandYoutube,
+} from '@tabler/icons-react'
+import Logo from '../shared/Logo'
+import Link from 'next/link'
+
+export default function Rodape() {
+    return (
+        <footer className="flex flex-col bg-black/30 text-zinc-400 mt-10">
+            <div className="h-px bg-gradient-to-r from-violet-600/20 via-violet-600/80 to-violet-600/20"></div>
+            <div className="container flex flex-col py-10 gap-10">
+                <div className="flex flex-col md:flex-row items-center md:items-start justify-between text-center md:text-left gap-5 md:gap-0">
+                    <Logo />
+                    <div className="flex flex-col gap-1">
+                        <span className="text-2xl font-bold text-zinc-200 pb-2">Sobre</span>
+                        <Link href="/nossa-historia" className="text-sm hover:underline">Nossa História</Link>
+                        <Link href="/politica-de-privacidade" className="text-sm hover:underline">Política de Privacidade</Link>
+                        <Link href="/termos-de-uso" className="text-sm hover:underline">Termos de Uso</Link>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <span className="text-2xl font-bold text-zinc-200 pb-2">Contato</span>
+                        <a href="mailto:suporte@gam3r.store" className="text-sm hover:underline">suporte@gam3r.store</a>
+                        <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="text-sm flex items-center gap-2 hover:underline">
+                            <IconBrandWhatsapp size={20} className="text-green-500" />
+                            <span>WhatsApp</span>
+                        </a>
+                    </div>
+                </div>
+                <div className="flex flex-col md:flex-row items-center gap-1.5 justify-between">
+                    <div className="flex gap-2">
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                            <IconBrandYoutube size={28} stroke={1} className="hover:text-white" />
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                            <IconBrandInstagram size={28} stroke={1} className="hover:text-white" />
+                        </a>
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                            <IconBrandFacebook size={28} stroke={1} className="hover:text-white" />
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+                            <IconBrandLinkedin size={28} stroke={1} className="hover:text-white" />
+                        </a>
+                    </div>
+                    <div className="flex flex-col md:flex-row items-center gap-1.5 text-sm text-zinc-500">
+                        <div className="flex gap-1.5">
+                            <span>Feito com</span>
+                            <span>❤️</span>
+                            <span>em {new Date().getFullYear()}</span>
+                        </div>
+                        <span className="hidden md:inline-block">-</span>
+                        <span>Todos os direitos reservados</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    )
+}
+```
+
+> ### ATENÇÃO
+>
+> ___
+> ***Quando usar `<a>`?***  
+>
+>Links para URLs externas ***(fora do domínio da Aplicação)***.  
+***Exemplo***: redes sociais, WhatsApp, ou outros sites.  
+Para URLs externas, o componente `<Link>` não oferece benefícios significativos, e a tag `<a>` é mais adequada.  
+>
+> ***Exemplo:***
+>
+> ```tsx
+> <a
+>   href="<https://instagram.com>"
+>   target="_blank"
+>   rel="noopener noreferrer"
+>   className="hover:text-white"
+> >
+>   <IconBrandInstagram size={28} stroke={1} />
+> </a>
+> ```
+>
+> - `href`: Especifica o destino do link.  
+> - `target="_blank"`: Abre o link em uma nova aba.  
+> - `rel="noopener noreferrer"`: Melhora a segurança, prevenindo vulnerabilidades como o tab napping.  
+>
+> ***Quando usar `<Link>`?***  
+>
+> Links para URLs internas do mesmo domínio (páginas da Aplicação). O `<Link>`:
+>
+> - Pré-carrega a página de destino, melhorando o desempenho.  
+> - Trata automaticamente a navegação para evitar o recarregamento da página.  
+>
+> ***Exemplo:***
+>
+> ```tsx
+>   <Link href="/contato" className="hover:underline">
+>     Fale Conosco
+>   </Link>
+> ```
+>
+> - `href`: Especifica a rota interna.  
+> - O Next.js lida com a navegação sem recarregar a página.
+
+### Estrutura do Componente e Classes do TailwindCSS
+
+***Importações***  
+
+```tsx
+import {
+    IconBrandFacebook,
+    IconBrandInstagram,
+    IconBrandLinkedin,
+    IconBrandWhatsapp,
+    IconBrandYoutube,
+} from '@tabler/icons-react'
+import Logo from '../shared/Logo'
+import Link from 'next/link'
+...
+```
+
+- `Ícones das redes sociais`:  
+Importados da biblioteca @tabler/icons-react.
+
+- `Componente Logo`:  
+Exibe o logotipo reutilizável da Aplicação.
+
+- `Link do Next.js`:  
+Usado para navegação entre páginas internas.  
+
+***Estrutura do Rodapé***  
+
+***1. Container Principal***
+
+```tsx
+<footer className="flex flex-col bg-black/30 text-zinc-400 mt-10">
+```
+
+- `flex flex-col`:  
+Usa o modelo flexbox para organizar os elementos em uma coluna.
+
+- `bg-black/30`:  
+Define um fundo preto com 30% de opacidade.
+
+- `text-zinc-400`:  
+Define a cor do texto em um tom de cinza claro.
+
+- `mt-10`:  
+Adiciona uma margem superior de 10 unidades *(espaciamento entre o rodapé e o conteúdo anterior)*.  
+
+***2. Divisor Superior***
+
+```tsx
+<div className="h-px bg-gradient-to-r from-violet-600/20 via-violet-600/80 to-violet-600/20"></div>
+```
+
+- `h-px`:  
+Define a altura como ***1 pixel***, criando uma linha fina.
+
+- `bg-gradient-to-r`:  
+Aplica um gradiente horizontal *(da esquerda para a direita)*.
+
+- `from-violet-600/20, via-violet-600/80, to-violet-600/20`:  
+Gradiente que vai de violeta claro, passa por um tom mais intenso e volta ao tom claro.
+
+***3. Conteúdo Principal***
+
+```tsx
+<div className="container flex flex-col py-10 gap-10">
+```
+
+- `container`:  
+Centraliza o conteúdo e aplica espaçamento horizontal automático.
+
+- `flex flex-col`:  
+Organiza os elementos em uma coluna.
+
+- `py-10`:  
+Adiciona 10 unidades de espaçamento vertical *(padding em cima e embaixo)*.
+
+- `gap-10`:  
+Adiciona espaçamento de 10 unidades entre os elementos filhos.
+
+***4. Primeira Linha do Conteúdo***
+
+```tsx
+<div className="flex flex-col md:flex-row items-center md:items-start justify-between text-center md:text-left gap-5 md:gap-0">
+```
+
+- `flex flex-col`:  
+Em telas pequenas, organiza os elementos em uma coluna.
+
+- `md:flex-row`:  
+Em telas médias ou maiores, organiza os elementos em uma linha.
+
+- `items-center`:  
+Alinha os itens ao centro verticalmente *(padrão em telas pequenas)*.
+
+- `md:items-start`:  
+Em telas médias ou maiores, alinha os itens ao início verticalmente.
+
+- `justify-between`:  
+Distribui espaço igualmente entre os elementos filhos.
+
+- `text-center`:  
+Centraliza o texto em telas pequenas.
+
+- `md:text-left`:  
+Alinha o texto à esquerda em telas médias ou maiores.
+
+- `gap-5 md:gap-0`:  
+Adiciona um espaçamento entre os elementos, que é reduzido para zero em telas médias ou maiores.
+
+***5. Seções "Sobre" e "Contato"***
+
+```tsx
+<div className="flex flex-col gap-1">
+    <span className="text-2xl font-bold text-zinc-200 pb-2">Sobre</span>
+    <Link href="/nossa-historia" className="text-sm hover:underline">Nossa História</Link>
+    ...
+</div>
+```
+
+- `flex flex-col`:  
+Organiza os itens em uma coluna.
+
+- `gap-1`:  
+Adiciona um pequeno espaçamento entre os itens.
+
+- `text-2xl font-bold text-zinc-200`:  
+Define o título como maior, em negrito e em um cinza mais claro.
+
+- `pb-2`:  
+Adiciona espaçamento inferior ao título.
+
+- `text-sm hover:underline`:  
+Define o texto como pequeno e adiciona um sublinhado ao passar o mouse.
+
+***6. Redes Sociais e Direitos Autorais***
+
+```tsx
+<div className="flex gap-2">
+    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+        <IconBrandYoutube size={28} stroke={1} className="hover:text-white" />
+    </a>
+    ...
+</div>
+```
+
+- `flex`:  
+Usa o modelo flexbox para organizar os ícones horizontalmente.
+
+- `gap-2`:  
+Adiciona espaçamento entre os ícones.
+
+- `hover:text-white`:  
+Altera a cor do ícone para branco ao passar o mouse.
+
+```tsx
+<div className="flex flex-col md:flex-row items-center gap-1.5 text-sm text-zinc-500">
+    <div className="flex gap-1.5">
+        <span>Feito com</span>
+        <span>❤️</span>
+        <span>em {new Date().getFullYear()}</span>
+    </div>
+    <span className="hidden md:inline-block">-</span>
+    <span>Todos os direitos reservados</span>
+</div>
+```
+
+- `flex flex-col md:flex-row`:  
+Organiza os itens em uma coluna em telas pequenas e em uma linha em telas maiores.
+
+- `items-center`:  
+Alinha os itens ao centro verticalmente.
+
+- `gap-1.5`:  
+Adiciona espaçamento entre os itens.
+
+- `text-sm text-zinc-500`:  
+Define o texto como pequeno e em um tom mais claro de cinza.
+
+- `hidden md:inline-block`:  
+Esconde o divisor ***"-"*** em telas pequenas e o exibe em telas maiores.
+
+Este rodapé é totalmente responsivo, acessível e utiliza as funcionalidades do ***TailwindCSS*** para estilização e layout. Ele facilita a navegação para os usuários, fornecendo links para páginas importantes, redes sociais e formas de contato.
+
+[^ Sumário ^](./README.md)
+
+## Componente Pagina
+
+O componente `Pagina` é um layout reutilizável que define a estrutura geral de uma página na sua Aplicação. Ele organiza elementos como ***cabeçalho***, ***rodapé*** e ***conteúdo principal***, além de aplicar estilos como ***gradiente de fundo*** e ***imagem decorativa***.
+
+Agora criaremos o Componente `Pagina` que irá conter a estrutura de uma página, para isso, no caminho `src\app\components\template\` crie um arquivo `Pagina.tsx`.
+Posteriormente, iremos adicionar essa ***Página Estruturada*** dentro de um ***Layout***.
+
+```tsx
+// Pagina.tsx
+
+import Cabecalho from './Cabecalho'
+import Rodape from './Rodape'
+
+export interface PaginaProps {
+  children: any
+  className?: string
+  semCabecalho?: boolean
+  semRodape?: boolean
+}
+
+export default function Pagina(props: PaginaProps) {
+  return (
+    <div
+      //* Gradiente utilizando Classes Tailwind
+      className="flex flex-col min-h-screen bg-gradient-radial from-[#2d0064] to-[#0d001c]"
+
+      // className="flex flex-col min-h-screen"
+      //* Gradiente utilizando CSS puro
+      //* style={{
+      //*   background:
+      //*     'radial-gradient(50% 50% at 50% 50%, #2D0064 0%, #0D001C 100%)',
+      //* }}
+    >
+      <div
+        className="flex flex-col min-h-screen"
+        style={{ background: 'url("/background.png")' }}
+      >
+        {/* Se NÃO estiver semCabeçalho MOSTRA o Cabeçalho */}
+        {!props.semCabecalho && <Cabecalho />}
+        <main className={`flex flex-1 flex-col ${props.className ?? ''}`}>
+          {props.children}
+        </main>
+        {/* Se NÃO estiver semRodape MOSTRA o Rodapé */}
+        {!props.semRodape && <Rodape />}
+      </div>
+    </div>
+  )
+}
+
+```
+
+<h3>Código Explicado</h3>
+
+***Importações***  
+
+```tsx
+// Pagina.tsx
+
+import Cabecalho from './Cabecalho'
+import Rodape from './Rodape'
+...
+```
+
+- `Cabecalho`:  
+Exibe o Cabeçalho, componente React reutilizável da aplicação.  
+
+- `Rodape`:  
+Exibe o Rodapé, componente React reutilizável da aplicação.  
+
+O ***Componente Pagina*** não precisa recriar o cabeçalho e o rodapé, ele os utiliza como ***blocos prontos***, aumentando a ***modularidade*** e facilitando a manutenção.
+
+### 1. Propriedades (`Props`)
+
+O componente recebe as seguintes propriedades para personalização:
+
+```tsx
+// Pagina.tsx
+
+...
+export interface PaginaProps {
+    children: any
+    className?: string
+    semCabecalho?: boolean
+    semRodape?: boolean
+}
+...
+```
+
+- `children`:  
+Representa o conteúdo principal da página que será renderizado dentro do componente `Pagina`.
+
+- `className`:  
+Permite adicionar classes extras ao `<main>` para estilizar o conteúdo específico da página.
+
+- `semCabecalho e semRodape`:  
+São propriedades ***booleanas*** que controlam se o ***cabeçalho*** e o ***rodapé*** serão exibidos.
+
+### 2. Estrutura do Componente
+
+A estrutura é organizada em um ***contêiner principal***, um ***contêiner secundário*** e áreas opcionais para ***cabeçalho*** e ***rodapé***.
+
+```tsx
+// Pagina.tsx
+
+...
+return (
+    <div
+        className="flex flex-col min-h-screen"
+        style={{ background: 'radial-gradient(50% 50% at 50% 50%, #2d0064 0%, #0d001c 100%)' }}
+    >
+        <div
+            className="flex-1 flex flex-col w-screen"
+            style={{ background: 'url("/background.png")' }rodape}
+        >
+            {!props.semCabecalho && <Cabecalho />}
+            <main className={`flex-1 flex flex-col ${props.className ?? ''}`}>
+                {props.children}
+            </main>
+            {!props.semRodape && <Rodape />}
+        </div>
+    </div>
+)
+...
+```
+
+> [!CAUTION]  
+> A classe `w-screen` força o contêiner a ocupar 100% da largura da janela, ignorando ***margens*** e ***scrollbars***. Isso pode causar um estouro horizontal quando há elementos que somam ***padding/margin*** adicionais.
+> Troque `w-screen` por `w-full`, que respeita o tamanho total do conteúdo visível sem adicionar largura extra evitando assim o aparecimento indesejado da barra de rolagem horizontal.
+
+Se precisar de mais ajuda ou tiver dúvidas sobre otimização do layout ou outras partes do projeto, é só chamar!
+
+[^ Sumário ^](./README.md)
+
+### Explicação Detalhada do Radial Gradient
+
+O gradiente radial usado no componente `Pagina` é definido dentro do atributo `style` no contêiner principal:
+
+```tsx
+// Pagina.tsx
+
+...
+<div
+    className="flex flex-col min-h-screen"
+    style={{ background: 'radial-gradient(50% 50% at 50% 50%, #2d0064 0%, #0d001c 100%)' }}
+>
+...
+```
+
+O gradiente é criado com a função CSS `radial-gradient()`. Abaixo está uma análise detalhada de cada parte da construção:
+
+***1. `radial-gradient()`:***  
+Esta função CSS cria um gradiente em forma de círculo ou elipse, que se expande a partir de um ponto central *(ou especificado)* até as bordas. É diferente do `linear-gradient`, que cria transições ao longo de uma ***linha reta***.
+
+***2. `50% 50%`:***  
+Define o ponto central do gradiente no contêiner.  
+
+***50% 50%*** significa que o ponto central do gradiente está no ***centro horizontal e vertical*** do elemento. É equivalente a usar `center`.  
+
+Você pode alterar esses valores para deslocar o gradiente, por exemplo:  
+
+- `0% 0%`:  
+Começa no canto superior esquerdo.
+- `100% 100%`:  
+Começa no canto inferior direito.  
+
+***3. `at 50% 50%`:***  
+Especifica explicitamente a posição onde o gradiente começa. Nesse caso, é no ***centro do contêiner***.  
+
+O uso de `at` não é obrigatório quando você já define o ponto inicial, mas é uma ***prática útil para maior clareza***.
+
+***Exemplo alternativo:***
+
+```css
+// Exemplo
+
+radial-gradient(circle at 30% 70%, #2d0064, #0d001c);
+```
+
+Neste exemplo, o ponto inicial seria deslocado ***30% horizontalmente*** e ***70% verticalmente***.
+
+***4. `#2d0064 0%`:***  
+Define a primeira cor do gradiente e onde ela começa.
+
+- `#2d0064`:  
+Um tom de roxo escuro.
+- `0%`:  
+Indica que essa cor começa no ponto inicial do gradiente, ou seja, no centro.  
+
+***5. `#0d001c 100%`:***  
+Define a segunda cor do gradiente e onde ela termina.
+
+- `#0d001c`:  
+Um tom de azul quase preto.  
+- `100%`:  
+Indica que essa cor se espalha até a borda externa do gradiente.
+
+> ### Como Experimentar e Alterar
+>
+> ___
+>
+> ***Mudando o Ponto Central:***  
+>
+> `radial-gradient(50% 50% at 30% 70%, #2d0064 0%, #0d001c 100%)`:  
+O gradiente será deslocado para o lado esquerdo e um pouco para baixo.  
+>
+> ***Adicionando Mais Cores:***
+>
+> `radial-gradient(50% 50%, #2d0064 0%, #420093 50%, #0d001c 100%)`:  
+Aqui, adicionamos uma terceira cor intermediária (#420093) na posição 50%, criando uma transição mais rica.  
+>
+> ***Ajustando o Tipo de Gradiente:***  
+>
+> `circle ou ellipse`:  
+> Você pode forçar o gradiente a ser circular (circle) ou elíptico (ellipse).
+
+<br>
+
+Quando aplicado ao contêiner, o gradiente faz a ***transição suave*** de um ***roxo escuro*** no centro para um ***azul-escuro/preto*** nas bordas. Essa escolha de cores cria um efeito visual que dá profundidade e um estilo moderno, especialmente adequado para interfaces elegantes ou futuristas.
+
+[^ Sumário ^](./README.md)
+
+### Recriando o Radial-Gradient com Tailwind
+
+O ***Tailwind CSS*** suporta a criação de gradientes personalizados com ***classes utilitárias***, incluindo ***gradientes radiais***, tornando o processo mais simples e eficiente. Você pode usar as ***classes integradas*** e se necessário, personalizar gradientes no arquivo de configuração `tailwind.config.js`.
+
+***Classe de Gradiente Radial:***  
+Use `bg-gradient-radial` para indicar que o gradiente será radial.
+
+***Cores e Posições:***  
+As cores podem ser aplicadas usando classes de cor padrão (`from-`, `via-`, `to-`) e transições suaves são aplicadas automaticamente.
+
+***Exemplo em Tailwind:***  
+
+```tsx
+// Exemplo
+
+<div className="min-h-screen flex flex-col bg-gradient-radial from-[#2d0064] to-[#0d001c]"></div>
+```
+
+- `from-[#2d0064]`:  
+Define o ponto inicial com o ***roxo escuro***.
+
+- `to-[#0d001c]`:  
+Define o ponto final com ***azul/preto***.
+
+> [!NOTE]
+> ***O `from` é equivalente ao `0%`, e o `to` é equivalente ao `100%`.***
+
+<br>
+
+[^ Sumário ^](./README.md)
+
+### Criando Classe Personalizada
+
+Se você precisa de mais controle, como especificar a posição ou adicionar mais cores, pode usar a configuração de Tailwind. Adicione algo parecido no arquivo `tailwind.config.js`:
+
+***Configuração no Tailwind:***
+
+```js
+// tailwind.config.js
+
+...
+module.exports = {
+  theme: {
+    extend: {
+      backgroundImage: {
+        'custom-radial': 'radial-gradient(at 50% 50%, #2d0064, #0d001c)',
+      },
+    },
+  },
+  plugins: [],
+};
+...
+```
+
+***Uso no Componente:***
+
+```tsx
+// Exemplo
+
+<div className="min-h-screen flex flex-col bg-custom-radial"></div>
+```
+
+### Vantagens do Tailwind CSS
+
+- ***Consistência:***  
+Classes reutilizáveis evitam inconsistências no código.
+
+- ***Manutenção Simples:***  
+Alterações em gradientes personalizados são feitas em um único lugar (`tailwind.config.js`).
+
+- ***Produtividade:***  
+Classes utilitárias eliminam a necessidade de escrever estilos CSS manuais.
+
+Se o gradiente que você precisa for relativamente simples, usar apenas as classes como b`g-gradient-radial`, `from-`, e `to-` é suficiente. Para gradientes complexos, configurar no arquivo de tema ainda é eficiente.
+
+### 3. Explicação Detalhada
+
+### Contêiner Principal
+
+- Define o ***layout geral*** com a classe `flex flex-col` para organizar os elementos em coluna.
+
+- A classe `min-h-screen` garante que o contêiner ocupe a altura total da tela.
+
+- O fundo é estilizado com um gradiente radial usando `style`.
+
+```tsx
+// Pagina.tsx
+
+...
+<div
+    className="flex flex-col min-h-screen"
+    style={{ background: 'radial-gradient(50% 50% at 50% 50%, #2d0064 0%, #0d001c 100%)' }}
+>
+...
+```
+
+### Contêiner Secundário
+
+- `background: 'url("/background.png"`:  
+Aplica uma imagem de fundo com `style`.
+
+- `flex-1`:  
+A classe permite que este contêiner ocupe o espaço restante na tela.
+
+```tsx
+// Pagina.tsx
+
+...
+<div
+    className="flex-1 flex flex-col w-screen"
+    style={{ background: 'url("/background.png")' }}
+>
+...
+```
+
+### Cabeçalho Condicional
+
+O cabeçalho é exibido apenas se a propriedade `semCabecalho` não for `true`.
+
+```tsx
+// Pagina.tsx
+...
+{!props.semCabecalho && <Cabecalho />}
+...
+```
+
+### Conteúdo Principal
+
+É na tag `<main>` que personalizamos o conteúdo principal da Página, é aqui que podemos personalizar as propriedades através de `{props.className}`
+
+- A área principal da página está dentro de uma tag `<main>`.
+
+- A classe `flex-1` faz com que o conteúdo principal ocupe o restante do espaço.
+
+- A propriedade `className` é usada para aplicar estilos adicionais passados dinamicamente.
+
+```tsx
+// Pagina.tsx
+
+...
+<main className={`flex-1 flex flex-col ${props.className ?? ''}`}>
+    {props.children}
+</main>
+...
+```
+
+> [!TIP]
+> Não utilizamos a classe `container` neste Componente e nem no `main`, pois, deixaremos que cada página possa decidir se utiliza ou não o ***Layout Boxed.***
+
+### Rodapé Condicional
+
+Assim como o cabeçalho, o rodapé só aparece se a propriedade `semRodape` não for `true`.
+
+```tsx
+// Pagina.tsx
+
+..
+{!props.semRodape && <Rodape />}
+...
+```
+
+[^ Sumário ^](./README.md)
+
+### 4. Estilo com TailwindCSS
+
+O componente usa classes do TailwindCSS para estilização:
+
+- `flex flex-col`:  
+Organiza os elementos em uma ***coluna vertical***.
+
+- `min-h-screen`:  
+Define uma ***altura mínima*** que preenche toda a tela.
+
+- `w-screen`:  
+Faz o contêiner secundário ocupar ***toda a largura da tela***.
+
+- `flex-1`:  
+Faz com que o ***conteúdo principal cresça*** para ocupar o espaço restante.
+
+- `radial-gradient` (via `style`):  
+Adiciona um fundo em gradiente radial.
+
+- `url("/background.png")` (via `style`):  
+Define uma imagem de fundo.
+
+Com isso, o que podemos concluir é que O ***Componente Pagina*** organiza a estrutura básica de uma página com ***cabeçalho***, ***rodapé***, e um ***fundo personalizado***. Ele é ***flexível*** o suficiente para atender diferentes necessidades de layout, enquanto mantém um design consistente em todo o Aplicação.
+
+[^ Sumário ^](./README.md)
+
+## Exibindo o Componente Pagina
+
+Agora que já temos o Componente `Pagina` estruturado conforme desejamos, podemos pegar o Template que acabamos de definir e ***envolver*** o conteúdo principal da aplicação `src\app\page.tsx` com o ***Componente Pagina.***  
+
+Então, no caminho `src\app\page.tsx` envolva o Conteúdo Principal com o Template `<Pagina />`, como podemos observar logo abaixo:  
+
+```tsx
+// src\app\page.tsx
+
+import { produtos } from '@/core'
+import ProdutoItem from './components/produto/ProdutoItem'
+import Pagina from './components/template/Pagina'
+
+export default function Home() {
+  return (
+    <Pagina>
+      <div className="grid grid-cols-4 container gap-5 py-10">
+        {produtos.map((produto) => (
+          <ProdutoItem key={produto.id} produto={produto} />
+        ))}
+      </div>
+    </Pagina>
+  )
+}
+```
+
+Como envolvemos todo o Conteúdo da Página Inicial com o Templete, visualizaremos o Cabeçalho *(com logos e carrinho de compras)*, o Conteúdo Principal *(com a imagem de fundo e a lista de produtos)* e o Rodapé com todos os seus elementos, como podemos visualizar nas duas imagens a seguir:  
+
+<div align='center'><img alt='Cabeçalho' src='./imagens/013.png' /></div>
+
+<br>
+
+<div align='center'><img alt='Rodapé' src='./imagens/014.png' /></div>
+
+1:28
