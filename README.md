@@ -50,3 +50,4 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
         - [Criando Classe Personalizada](./DOCUMENTACAO.md/#criando-classe-personalizada)
     - [3. Explicação Detalhada](./DOCUMENTACAO.md/#3-explicação-detalhada)
     - [4. Estilo com TailwindCSS](./DOCUMENTACAO.md/#4-estilo-com-tailwindcss)
+  - [Criando Grupo de Rotas](./DOCUMENTACAO.md/#criando-grupo-de-rotas)

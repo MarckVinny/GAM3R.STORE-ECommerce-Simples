@@ -2402,23 +2402,35 @@ A estrutura é organizada em um ***contêiner principal***, um ***contêiner sec
 // Pagina.tsx
 
 ...
-return (
+export default function Pagina(props: PaginaProps) {
+  return (
     <div
-        className="flex flex-col min-h-screen"
-        style={{ background: 'radial-gradient(50% 50% at 50% 50%, #2d0064 0%, #0d001c 100%)' }}
+      //* Gradiente utilizando Classes Tailwind
+      className="flex flex-col min-h-screen bg-gradient-radial from-[#2d0064] to-[#0d001c]"
+
+      // className="flex flex-col min-h-screen"
+      //* Gradiente utilizando CSS puro
+      //* style={{
+      //*   background:
+      //*     'radial-gradient(50% 50% at 50% 50%, #2D0064 0%, #0D001C 100%)',
+      //* }}
     >
-        <div
-            className="flex-1 flex flex-col w-screen"
-            style={{ background: 'url("/background.png")' }rodape}
-        >
-            {!props.semCabecalho && <Cabecalho />}
-            <main className={`flex-1 flex flex-col ${props.className ?? ''}`}>
-                {props.children}
-            </main>
-            {!props.semRodape && <Rodape />}
-        </div>
+      <div
+        //! w-screen causou estouro de tela (overflow) 
+        className="flex flex-1 flex-col w-full bg-[url('/background.png')] bg-contain"
+        // style={{ backgroundImage: 'url("/background.png")' }}
+      >
+        {/* Se NÃO estiver semCabeçalho MOSTRA o Cabeçalho */}
+        {!props.semCabecalho && <Cabecalho />}
+        <main className={`flex flex-1 flex-col ${props.className ?? ''}`}>
+          {props.children}
+        </main>
+        {/* Se NÃO estiver semRodape MOSTRA o Rodapé */}
+        {!props.semRodape && <Rodape />}
+      </div>
     </div>
-)
+  )
+}
 ...
 ```
 
@@ -2528,6 +2540,12 @@ Use `bg-gradient-radial` para indicar que o gradiente será radial.
 ***Cores e Posições:***  
 As cores podem ser aplicadas usando classes de cor padrão (`from-`, `via-`, `to-`) e transições suaves são aplicadas automaticamente.
 
+- `from-[#2d0064]`:  
+Define o ponto inicial com o ***roxo escuro***.
+
+- `to-[#0d001c]`:  
+Define o ponto final com ***azul/preto***.
+
 ***Exemplo em Tailwind:***  
 
 ```tsx
@@ -2536,13 +2554,8 @@ As cores podem ser aplicadas usando classes de cor padrão (`from-`, `via-`, `to
 <div className="min-h-screen flex flex-col bg-gradient-radial from-[#2d0064] to-[#0d001c]"></div>
 ```
 
-- `from-[#2d0064]`:  
-Define o ponto inicial com o ***roxo escuro***.
-
-- `to-[#0d001c]`:  
-Define o ponto final com ***azul/preto***.
-
 > [!NOTE]
+> O código acima que estaremos utilizando como padrão em nosso projeto como gradiente.  
 > ***O `from` é equivalente ao `0%`, e o `to` é equivalente ao `100%`.***
 
 <br>
@@ -2614,7 +2627,7 @@ Se o gradiente que você precisa for relativamente simples, usar apenas as class
 ...
 ```
 
-### Contêiner Secundário
+### Contêiner Secundário *(Background)*
 
 - `background: 'url("/background.png"`:  
 Aplica uma imagem de fundo com `style`.
@@ -2740,5 +2753,131 @@ Como envolvemos todo o Conteúdo da Página Inicial com o Templete, visualizarem
 <br>
 
 <div align='center'><img alt='Rodapé' src='./imagens/014.png' /></div>
+
+[^ Sumário ^](./README.md)
+
+## Criando Grupo de Rotas
+
+No Next.js, um ***Grupo de Rotas*** ou ***(Route Groups)*** é uma funcionalidade introduzida no ***App Router*** que permite organizar melhor a estrutura das rotas sem impactar diretamente na URL gerada.  
+
+Ele é especialmente útil para:
+
+- ***Agrupar arquivos logicamente:***  
+Permite criar subpastas no diretório `app\` para organizar ***componentes*** e ***páginas***, sem que isso altere a estrutura da rota final na URL.
+
+- ***Reutilizar layouts ou componentes:***  
+Você pode encapsular páginas ou rotas dentro de ***layouts*** ou ***provedores específicos***, tornando a manutenção e a reutilização mais fáceis.
+
+- ***Ignorar na URL:***  
+As pastas de grupos de rotas têm o nome prefixado com entre parenteses `( )`, e isso faz com que sejam ignoradas no caminho final da URL.
+
+***Exemplo:***  
+Imagine a seguinte estrutura no diretório ***app\***:
+
+```tsx
+// Exemplo
+
+app/
+├── (grupo-auth)/
+│   ├── login/
+│   │   └── page.tsx
+│   ├── register/
+│   │   └── page.tsx
+├── dashboard/
+│   └── page.tsx
+```
+
+***Nesse caso:***
+
+- As ***rotas*** `/login` e `/register` não terão o prefixo `grupo-auth`.  
+
+- O grupo ***grupo-auth*** pode ser usado para compartilhar um ***layout*** ou ***provedores***, como autenticação.  
+
+***Benefícios:***  
+
+- Organização do código sem poluir a URL.
+
+- Criação de estruturas reutilizáveis.
+
+- Reduz a complexidade no gerenciamento de ***layouts*** e ***contextos***.  
+
+Em nossa aplicação, iremos utilizar o Grupo de Rotas chamado `(paginas)` esse grupo de rotas estará dentro do diretório `app\` e todas as páginas e componentes que estiverem dentro desse Grupo de Rotas irá respeitar o que for definido no ***Componente Layout*** que iremos criar agora.  
+Então, no caminho `src\app\` crie o diretório `(paginas)\` e logo depois crie o arquivo `layout.tsx`.
+
+```tsx
+// layout.tsx
+
+import Pagina from "../components/template/Pagina";
+
+export default function Layout(props: any) {
+  return (
+    <Pagina>
+      {props.children}
+    </Pagina>
+  )
+}
+```
+
+Com isso, não precisamos mais de forma explícita especificar que um Componente está envolvido por uma Página.  
+Com isso se formos no caminho `src\app\page.tsx` e remover o Componente `<Pagina>`, ele perderá todo o visual que fizemos até este momento como podemos ver logo abaixo:  
+
+```tsx
+// layout.tsx
+
+import { produtos } from '@/core'
+import ProdutoItem from './components/produto/ProdutoItem'
+
+export default function Home() {
+  return (
+    <div className="grid grid-cols-4 container gap-5 py-10">
+      {produtos.map((produto) => (
+        <ProdutoItem key={produto.id} produto={produto} />
+      ))}
+    </div>
+  )
+}
+```
+
+<div align='center'><img alt='sem-formatação' src='./imagens/012.png' /></div>
+
+<br>
+
+Como podemos observar acima, foi perdida toda a formatação da Página, já não podemos visualizar mais *(Cabeçalho, background e Rodapé).*
+
+Mas, quando movemos o arquivo `page.tsx` que se encontra no caminho `src\app\` pra o Grupo de Rotas `src\app\(paginas)\`, a mágica acontece e a formatação da página volta a funcionar, pois, tudo que estiver dentro do Grupo de Rotas, irá respeitar as definições do arquivo `layout.tsx`.
+
+***Cabeçalho:***  
+
+<div align='center'><img alt='sem-formatação' src='./imagens/013.png' /></div>
+<br>
+
+***Rodapé:***  
+
+<div align='center'><img alt='sem-formatação' src='./imagens/014.png' /></div>
+
+<br>
+
+Movendo o diretório de Produtos para dentro do Grupo de Rotas, ele também será envolvido pelas definições feitas no arquivo ***layout*** do grupo de rotas como podemos ver abaixo o antes e o depois.  
+
+> ### Nota
+>
+> ___
+> Pare o projeto antes de mover o diretório para não demorar nem dar erro, depois inicie novamente `npm run dev` e teste para confirmar que tudo deu certo.  
+
+<br>
+
+***Página do Produto (antes):***  
+
+<div align='center'><img alt='sem-formatação' src='./imagens/006.png' /></div>
+<br>
+
+***Página Completa:***  
+
+<div align='center'><img alt='sem-formatação' src='./imagens/015.png' /></div>
+
+<br>
+
+Como podemos observar no exemplo acima, o Grupo de Rota funcionou e adicionou o Layout a Página do Produto, como esperado.  
+
 
 1:28

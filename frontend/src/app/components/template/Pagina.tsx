@@ -22,7 +22,7 @@ export default function Pagina(props: PaginaProps) {
       //* }}
     >
       <div
-        //! w-screen causou estouro de tela (overflow)
+        //! w-screen causou estouro de tela (overflow) 
         className="flex flex-1 flex-col w-full bg-[url('/background.png')] bg-contain"
         // style={{ backgroundImage: 'url("/background.png")' }}
       >
