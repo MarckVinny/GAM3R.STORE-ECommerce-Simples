@@ -1623,7 +1623,7 @@ Abaixo podemos verificar como a página está ficando:
 
 [^ Sumário ^](./README.md)
 
-## Criando o Layout da Aplicação
+## Layout da Aplicação
 
 Agora iremos definir o ***Layout da Aplicação*** onde teremos o Cabeçalho, Body, Rodapé e o que mais for necessário adicionar na aplicação.  
 
@@ -2562,7 +2562,7 @@ Define o ponto final com ***azul/preto***.
 
 [^ Sumário ^](./README.md)
 
-### Criando Classe Personalizada
+### Classe Personalizada
 
 Se você precisa de mais controle, como especificar a posição ou adicionar mais cores, pode usar a configuração de Tailwind. Adicione algo parecido no arquivo `tailwind.config.js`:
 
@@ -2756,7 +2756,7 @@ Como envolvemos todo o Conteúdo da Página Inicial com o Templete, visualizarem
 
 [^ Sumário ^](./README.md)
 
-## Criando Grupo de Rotas
+## Grupo de Rotas
 
 No Next.js, um ***Grupo de Rotas*** ou ***(Route Groups)*** é uma funcionalidade introduzida no ***App Router*** que permite organizar melhor a estrutura das rotas sem impactar diretamente na URL gerada.  
 
@@ -2881,7 +2881,7 @@ Como podemos observar no exemplo acima, o Grupo de Rota funcionou e adicionou o 
 
 [^ Sumário ^](./README.md)
 
-## Criando Componente ListaProdutos
+## Componente ListaProdutos
 
 Antes de começar a criar o Componente `<ListaProdutos />` precisamos realizar algumas alterações na Página Inicial.
 
@@ -3028,7 +3028,7 @@ export default function ListaProdutos() {
 
 [^ Sumário ^](./README.md)
 
-## Criando Componente ProdutoNaoEncontrado
+## Componente ProdutoNaoEncontrado
 
 O componente **`ProdutoNaoEncontrado`** é um componente de interface que exibe uma mensagem amigável ao usuário quando nenhum produto é encontrado. Ele inclui um ícone representativo, um texto explicativo e, opcionalmente, um botão para voltar à página inicial.
 
