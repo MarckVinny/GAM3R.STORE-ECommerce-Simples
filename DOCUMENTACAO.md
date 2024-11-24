@@ -2879,5 +2879,315 @@ Movendo o diretório de Produtos para dentro do Grupo de Rotas, ele também ser�
 
 Como podemos observar no exemplo acima, o Grupo de Rota funcionou e adicionou o Layout a Página do Produto, como esperado.  
 
+[^ Sumário ^](./README.md)
 
-1:28
+## Criando Componente ListaProdutos
+
+Antes de começar a criar o Componente `<ListaProdutos />` precisamos realizar algumas alterações na Página Inicial.
+
+```tsx
+// src\app\(paginas)\page.tsx
+
+import { produtos } from '@/core'
+import ProdutoItem from '../components/produto/ProdutoItem'
+
+export default function Home() {
+  return (
+    <div className="flex flex-col container gap-5 py-10">
+      {produtos.map((produto) => (
+        <ProdutoItem key={produto.id} produto={produto} />
+      ))}
+    </div>
+  )
+}
+```
+
+Modificamos de `grid grid-cols-4` para `flex flex-col` pois iremos formatar o grid no novo componente.
+
+Então, no caminho `src\app\components\produto\` crie um novo arquivo `ListaProdutos.tsx`.
+
+```tsx
+// ListaProdutos.tsx
+
+'use client'
+import { produtos } from '@/core'
+// import useProdutos from '@/data/hooks/useProdutos'
+import ProdutoItem from './ProdutoItem'
+import ProdutoNaoEncontrado from './ProdutoNaoEncontrado'
+
+export default function ListaProdutos() {
+  // const { produtos } = useProdutos()
+    return produtos.length ? (
+      <div
+            className="
+                grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5
+            "
+        >
+            {produtos.map((produto) => (
+                <ProdutoItem produto={produto} key={produto.id} />
+            ))}
+        </div>
+    ) : (
+        <ProdutoNaoEncontrado semBotaoVoltar />
+    )
+}
+```
+
+### Descrição do Componente
+
+O componente **`ListaProdutos`** é responsável por exibir uma lista de produtos ou uma mensagem caso nenhum produto esteja disponível. Ele utiliza as classes do **Tailwind CSS** para criar um layout responsivo, adaptável a diferentes tamanhos de tela.  
+
+Outra coisa que precisamos observar, é que como esse Componente é executado no navegador é necessário adicionar `use client`no inicio do código para que funcione sem causar mensagens de erro.
+
+### Importações Necessárias
+
+```tsx
+'use client'
+import { produtos } from '@/core'
+import ProdutoItem from './ProdutoItem'
+import ProdutoNaoEncontrado from './ProdutoNaoEncontrado'
+```
+
+- **`produtos`**: Array de objetos representando os produtos disponíveis, importado de `@/core`.
+- **`ProdutoItem`**: Componente que exibe as informações detalhadas de cada produto.
+- **`ProdutoNaoEncontrado`**: Componente que informa ao usuário que não há produtos disponíveis.
+
+### Estrutura Principal
+
+```tsx
+export default function ListaProdutos() {
+    return produtos.length ? (
+        <div
+            className="
+                grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5
+            "
+        >
+            {produtos.map((produto) => (
+                <ProdutoItem produto={produto} key={produto.id} />
+            ))}
+        </div>
+    ) : (
+        <ProdutoNaoEncontrado semBotaVoltar />
+    )
+}
+```
+
+- **Verificação da Disponibilidade de Produtos**:
+
+  ```tsx
+  return produtos.length ? ( ... ) : ( ... )
+  ```
+
+  - Verifica se o array `produtos` contém elementos. Se sim, renderiza uma grade de produtos; caso contrário, exibe o componente `ProdutoNaoEncontrado`.
+
+- **Grade Responsiva**:
+
+  ```tsx
+  <div
+      className="
+          grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5
+      "
+  >
+      {produtos.map((produto) => (
+          <ProdutoItem produto={produto} key={produto.id} />
+      ))}
+  </div>
+  ```
+
+  - **Configuração da Grade**:
+    - **`grid`**: Configura a lista como uma grade.
+    - **`grid-cols-1`**: Configura a grade com 1 coluna no padrão.
+    - **`sm:grid-cols-2`**: Expande para 2 colunas em telas pequenas.
+    - **`md:grid-cols-3`**: Expande para 3 colunas em telas médias.
+    - **`lg:grid-cols-4`**: Expande para 4 colunas em telas grandes.
+    - **`gap-5`**: Define um espaçamento uniforme entre os itens da grade.
+
+- **Mapeamento de Produtos**:
+
+  ```tsx
+  {produtos.map((produto) => (
+      <ProdutoItem produto={produto} key={produto.id} />
+  ))}
+  ```
+
+  - Itera sobre o array `produtos` e cria um componente `ProdutoItem` para cada item, passando `produto` como prop.
+
+### Exibição de Mensagem Quando Não Há Produtos
+
+```tsx
+<ProdutoNaoEncontrado semBotaoVoltar />
+```
+
+- Exibe o componente **`ProdutoNaoEncontrado`** com a propriedade `semBotaoVoltar` definida como `true`, indicando que o botão de ***"voltar"*** está desabilitado.
+
+### Resumo
+
+- Quando o array `produtos` contém elementos, o layout será exibido como uma grade configurada pelas classes **Tailwind CSS** mencionadas acima.
+- Caso `produtos` esteja vazio, será exibida a mensagem definida no componente **`ProdutoNaoEncontrado`**, sem o botão de voltar.
+- A estrutura responsiva garante que o ***layout da grade*** se ajuste de 1 a 4 colunas, dependendo do tamanho da tela do usuário.
+
+[^ Sumário ^](./README.md)
+
+## Criando Componente ProdutoNaoEncontrado
+
+O componente **`ProdutoNaoEncontrado`** é um componente de interface que exibe uma mensagem amigável ao usuário quando nenhum produto é encontrado. Ele inclui um ícone representativo, um texto explicativo e, opcionalmente, um botão para voltar à página inicial.
+
+Então, no caminho `src\app\components\produto\` crie um novo arquivo `ProdutoNaoEncontrado.tsx`.
+
+```ts
+// ProdutoNaoEncontrado.ts
+
+import { IconDevicesPcOff } from '@tabler/icons-react'
+import Link from 'next/link'
+
+export interface ProdutoNaoEncontradoProps {
+    semBotaoVoltar?: boolean
+}
+
+export default function ProdutoNaoEncontrado(props: ProdutoNaoEncontradoProps) {
+    return (
+        <div className="flex-1 flex flex-col justify-center items-center text-violet-300">
+            <IconDevicesPcOff size={180} stroke={0.5} />
+            <span className="text-violet-300 font-light">Produto não encontrado</span>
+            {!props.semBotaoVoltar && (
+                <Link href="/" className="button bg-violet-700 text-white mt-5">
+                    Voltar
+                </Link>
+            )}
+        </div>
+    )
+}
+```
+
+### Estrutura do Componente
+
+```tsx
+export default function ProdutoNaoEncontrado(props: ProdutoNaoEncontradoProps) {
+    return (
+        <div className="flex-1 flex flex-col justify-center items-center text-violet-300">
+            <IconDevicesPcOff size={180} stroke={0.5} />
+            <span className="text-violet-300 font-light">Produto não encontrado</span>
+            {!props.semBotaoVoltar && (
+                <Link href="/" className="button bg-violet-700 text-white mt-5">
+                    Voltar
+                </Link>
+            )}
+        </div>
+    )
+}
+```
+
+### Importações Necessárias
+
+```tsx
+import { IconDevicesPcOff } from '@tabler/icons-react'
+import Link from 'next/link'
+```
+
+- **`IconDevicesPcOff`**: Ícone importado da biblioteca **Tabler Icons**.
+- **`Link`**: Componente do Next.js para navegação eficiente entre páginas.
+
+### Descrição dos Códigos
+
+1. **Propriedades do Componente**:
+
+   ```tsx
+   export interface ProdutoNaoEncontradoProps {
+       semBotaoVoltar?: boolean
+   }
+   ```
+
+   - **`semBotaoVoltar`**: Propriedade opcional (`boolean`) que define se o botão "Voltar" será exibido. Caso seja `true`, o botão é ocultado.
+
+2. **Estrutura HTML e Estilo Principal**:
+
+   ```tsx
+   <div className="flex-1 flex flex-col justify-center items-center text-violet-300">
+   ```
+
+   - **`flex-1`**: Faz o componente ocupar todo o espaço disponível em um contêiner flex.
+   - **`flex flex-col`**: Configura o layout como uma coluna flexível.
+   - **`justify-center`**: Centraliza verticalmente o conteúdo dentro do contêiner.
+   - **`items-center`**: Centraliza horizontalmente o conteúdo dentro do contêiner.
+   - **`text-violet-300`**: Define a cor padrão do texto como um tom de violeta.
+
+3. **Ícone Representativo**:
+
+   ```tsx
+   <IconDevicesPcOff size={180} stroke={0.5} />
+   ```
+
+   - Utiliza o ícone **`IconDevicesPcOff`** da biblioteca **Tabler Icons**.
+   - **`size={180}`**: Define o tamanho do ícone.
+   - **`stroke={0.5}`**: Define a espessura do traçado do ícone.
+
+4. **Mensagem de Produto Não Encontrado**:
+
+   ```tsx
+   <span className="text-violet-300 font-light">Produto não encontrado</span>
+   ```
+
+   - Texto que informa ao usuário que nenhum produto foi localizado.
+   - **`font-light`**: Define o peso da fonte como leve.
+
+5. **Botão de Voltar (Opcional)**:
+
+   ```tsx
+   {!props.semBotaoVoltar && (
+       <Link href="/" className="button bg-violet-700 text-white mt-5">
+           Voltar
+       </Link>
+   )}
+   ```
+
+   - **Condição**: O botão só será exibido se `semBotaoVoltar` não estiver definido como `true`.
+   - **`Link`**: Componente do Next.js para criar links que otimizam a navegação.
+   - **`href="/"`**: Define o redirecionamento para a página inicial.
+   - **Classes do Botão**:
+     - **`button`**: Classe personalizada (presumivelmente configurada globalmente).
+     - **`bg-violet-700`**: Define o fundo do botão como violeta escuro.
+     - **`text-white`**: Define a cor do texto como branco.
+     - **`mt-5`**: Adiciona uma margem superior para espaçamento.
+
+### Resumo
+
+- **Responsividade**: O layout é responsivo, centralizando o conteúdo na tela.
+- **Customização**: A exibição do botão "Voltar" é controlada pela prop **`semBotaoVoltar`**.
+- **Aparência**: Utiliza estilos simples e modernos com classes do **Tailwind CSS**.
+- **Propósito**: Garante que o usuário receba um feedback visual claro caso não existam produtos disponíveis e, opcionalmente, fornece um botão para facilitar o retorno à página inicial.
+
+[^ Sumário ^](./README.md)
+
+## Listando Produtos na Página Inicial
+
+Agora que já criamos os Componente `<ListaProdutos />` e `<ProdutoNaoEncontra />` podemos utilizar em nossa Página Inicial, então, edite o arquivo `src\app\(paginas)\page.tsx`.
+
+```tsx
+// page.tsx
+
+import ListaProdutos from '../components/produto/ListaProdutos'
+
+export default function Home() {
+  return (
+    <div className="flex flex-col container gap-5 py-10">
+      <ListaProdutos />
+    </div>
+  )
+}
+```
+
+Remova o `produto.map` que listava os Produtos anteriormente pelo ***Componente ListaProdutos*** e verifique se está sendo exibido corretamente.  
+
+Agora, podemos fazer uma verificação se a Página que exibe o ícone de ***Produto Não Encontrado*** do Componente `ListaProdutos`, podemos fazer uma alteração na lógica para forçar a exibição do ícone, então, edite o arquivo no caminho `src\app\components\produto\ListaProdutos.tsx` no retorno da Função `return produtos.length ? (` altere para `return produtos.length < 0 ? (` e verifique se é exibido o ícone com a mensagem ***"Produto não encontrado"*** como na imagem abaixo.
+
+<div align='center'><img alt='Produto-nao-encontrado' src='./imagens/016.png' /></div>
+
+<br>
+
+Agora que já invertemos a ***lógica de exibição*** da Lista de Produtos para poder ver o icone de ***Produto Não Encontrado***, não esqueça de voltar a lógica ao valor correto `return produtos.length ? (` para poder exibir a ***Lista de Produtos***.  
+
+<div align='center'><img alt='Produto-nao-encontrado' src='./imagens/013.png' /></div>
+
+<br>
+
+1:37
