@@ -3190,4 +3190,104 @@ Agora que já invertemos a ***lógica de exibição*** da Lista de Produtos para
 
 <br>
 
+[^ Sumário ^](./README.md)
+
+## Editando Definições do Produto
+
+Agora iremos editar o arquivo `page.tsx` que se encontra no caminho `src\app\(paginas)\produto\[id]`, é nesse arquivo que definimos as informações do produto e desenhamos a ***Página de Informações do Produto***.  
+
+```tsx
+// page.tsx
+
+import ProdutoNaoEncontrado from "@/app/components/produto/ProdutoNaoEncontrado"
+import { produtos } from "@/core"
+
+export default function PaginaProduto(props: any) {
+  const id = +props.params.id
+  const produto = produtos.find((produto) => produto.id === id)
+  return produto ? (
+    <div className="flex flex-1 items-center justify-center">
+      <div className="text-2xl border-2 border-gray-600 rounded-2xl p-4">
+        <h1>Produto: {produto?.nome}</h1>
+      </div>
+    </div>
+  ) : <ProdutoNaoEncontrado />
+}
+```
+
+Agora iremos implementar algumas regras para exibir as informações do produto:  
+
+- `return produto ? (...) : <ProdutoNaoEncontrado />`:  
+Se o produto existir `produto ?`, exibe o Produto `(<div> ... </div>)` senão `:`, exibe o Produto Não Encontrado `<ProdutoNaoEncontrado />` com o Botão Voltar.  
+
+<div align='center'><img alt='pne-voltar' src='./imagens/017.png' /></div>
+
+<br>
+
+[^ Sumário ^](./README.md)
+
+### Classe Personalizada Botão Voltar
+
+Como podemo observar na imagem acima, o botão ***Voltar*** não está estilizado como deveria, pois no Componente `<ProdutoNaoEncontrado />` estamos utilizando uma ***Classe Personalizada*** `.button` que ainda não foi adicionada aos Componentes `@layer components` no arquivo `globals.css` que se encontra no caminho `src\app\`, então abra o arquivo para que possamos adicionar essa nova Classe Personalizada.
+
+```css
+/* globals.css */
+
+...
+@layer components {
+  ...
+  .button {
+    @apply flex justify-center items-center;
+    @apply gap-2 rounded-full px-9 h-9;
+    @apply text-sm font-semibold;
+  }
+}
+...
+```
+
+O código utiliza a biblioteca **Tailwind CSS** com a funcionalidade de diretivas (`@apply`) para criar a classe personalizada `.button`. A classe combina várias utilidades do Tailwind para definir um estilo consistente para os botões.
+
+### Descrição das Propriedades
+
+- **`flex`**:  
+Define o layout do botão como ***flexível***, permitindo alinhar itens internos de forma mais fácil.
+
+- **`justify-center`**:  
+***Centraliza horizontalmente*** o conteúdo interno do botão.
+
+- **`items-center`**:  
+***Alinha verticalmente*** o conteúdo interno do botão.
+
+- **`gap-2`**:  
+Define um espaçamento `gap` de `0.5rem` ***8px*** entre os itens internos do botão caso seja adicionando um ícone.
+
+- **`rounded-full`**:  
+Aplica ***bordas completamente arredondadas***, criando um botão com formato elíptico ou circular *(dependendo do tamanho)*.
+
+- **`px-9`**:  
+Adiciona um ***preenchimento horizontal*** *(esquerda e direita)* de `2.25rem` ***36px***.
+
+- **`h-9`**:  
+Define a altura do botão como `2.25rem` ***36px***.
+
+- **`text-sm`**:  
+Define o tamanho do texto como ***pequeno***, equivalente a `0.875rem` ***14px*** por padrão.
+
+- **`font-semibold`**:  
+Define o peso da fonte como ***semi-negrito***, geralmente `600`.
+
+<div align='center'><img alt='pne-voltar-estilizado' src='./imagens/018.png' /></div>
+
+<br>
+
+Agora como podemos observar, o ***Botão Voltar*** foi renderizado com o estilo que definimos para a Classe Personalizada `.button` no arquivo `globals.css`
+
+### **Resultado Prático**
+
+Essa classe `.button` é ideal para criar botões estilizados com:
+
+- Layout centralizado *(texto ou ícones bem posicionados)*.
+- Aparência arredondada e espaçamento bem definido.
+- Texto pequeno com um peso que o destaca sem parecer excessivamente grosso.
+
 1:37
