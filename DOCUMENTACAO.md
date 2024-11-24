@@ -3340,4 +3340,139 @@ export default function PaginaProduto(props: any) {
   Adiciona um ***preenchimento vertical*** *(superior e inferior)* de `2.5rem` ***40px*** ao contêiner.  
   Garante espaçamento interno uniforme no ***eixo Y***.
 
-Essa será a camada que conterá a junção de diversos componentes para criar a página de ***Informações do Produto***.
+Essa será a camada que conterá a junção de diversos componentes para criar a página de ***Informações do Produto*** e o primeiro Componente que iremos criar, será o ***Título do Produto***.
+
+[^ Sumário ^](./README.md)
+
+## Componente TituloProduto
+
+Para isso, crie o arquivo `TituloProduto.tsx` no caminho `src\app\components\produto`.
+
+```tsx
+// TituloProduto.tsx
+
+import { Produto } from '@/core'
+
+export interface TituloProdutoProps {
+    produto: Produto
+}
+
+export default function TituloProduto(props: TituloProdutoProps) {
+    const { produto } = props
+    return (
+        <div className="flex flex-col">
+            <div className="text-2xl">{produto?.nome}</div>
+            <div className="font-light text-zinc-400">{produto?.descricao}</div>
+        </div>
+    )
+}
+```
+
+### Descrição do Componente `TituloProduto`
+
+O componente `TituloProduto` é responsável por exibir o ***título*** e a **descrição** de um produto. Ele utiliza propriedades recebidas através do objeto `props`, sendo `produto` a principal, representando os detalhes do item a serem exibidos.
+
+### Detalhamento
+
+#### Importações
+
+```typescript
+import { Produto } from '@/core'
+```
+
+- Importa o tipo ou interface `Produto` da pasta `core`. Presume-se que este tipo define as propriedades básicas de um produto, como `nome` e `descricao`.
+
+#### Interface `TituloProdutoProps`
+
+```typescript
+export interface TituloProdutoProps {
+    produto: Produto
+}
+```
+
+- Define o formato esperado para as propriedades recebidas pelo componente.
+- `produto` é do tipo `Produto` e contém os dados que serão renderizados.
+
+#### Estrutura do Componente
+
+```typescript
+export default function TituloProduto(props: TituloProdutoProps) {
+    const { produto } = props
+    return (
+        <div className="flex flex-col">
+            <div className="text-2xl">{produto?.nome}</div>
+            <div className="font-light text-zinc-400">{produto?.descricao}</div>
+        </div>
+    )
+}
+```
+
+##### Recebimento de Propriedades
+
+- O componente recebe um objeto `props` do tipo `TituloProdutoProps`.
+- É desestruturado para obter diretamente o atributo `produto`.
+
+#### Container Principal
+
+```html
+<div className="flex flex-col">
+```
+
+- Aplica as classes Tailwind:
+  - `flex`:  
+  Define o contêiner como um ***flex container***.
+  - `flex-col`:  
+  Organiza os elementos no eixo vertical *(de cima para baixo)*.
+
+#### Exibição do Nome do Produto
+
+```html
+<div className="text-2xl">{produto?.nome}</div>
+```
+
+- Exibe o nome do produto em um estilo maior.
+- A classe `text-2xl` aplica um tamanho de fonte correspondente a `1.5rem` (24px).
+
+#### Exibição da Descrição do Produto
+
+```html
+<div className="font-light text-zinc-400">{produto?.descricao}</div>
+```
+
+- Exibe a descrição do produto em uma cor suave e estilo leve.
+- Classes aplicadas:
+  - `font-light`:  
+  Aplica um peso de fonte mais leve.
+  - `text-zinc-400`:  
+  Aplica a cor cinza claro `#9ca3af`.
+
+#### Uso do Operador Opcional `?.`
+
+- As propriedades `nome` e `descricao` são acessadas de forma segura utilizando o operador opcional `?.` para evitar erros caso `produto` seja `undefined` ou `null`.
+
+> ### NOTA
+>
+> ___
+> ***Uma boa prática para dar destaque e importância a um Título e uma Descrição, é deixar o texto do título sempre com uma cor mais destacada, uma fonte negrito ou semi-negrito e maior, enquanto a Descrição ou Subtítulo, deve ficar em uma tonalidade menos evidente e uma fonte um pouco menor.***
+
+<br>
+
+Com o Componente `<TituloProduto />` criado, podemos voltar a Página de Informações do Produto `src\app\(paginas)\produto\[id]\page.tsx` e adicionar mais uma `<div>` dentro da ***DIV PRINCIPAL*** que criamos anteriormente, para enfim, colocar o Componente dentro dela, então adicione o código abaixo que cria uma `<div>` flexível, com colunas e espaçamento de 36px.
+
+```tsx
+// page.tsx
+
+...
+  <div className="flex flex-col gap-10">
+    <TituloProduto produto={produto} />
+  </div>
+...
+```
+
+<div align='center'><img alt='titulo-descricao' src='./imagens/019.png' /></div>
+
+<br>
+
+Como podemos observar na imagem acima, agora temos um ***Título*** com o Nome do Produto destacado e uma ***Descrição*** com um texto menor e cinza.
+
+1:46
