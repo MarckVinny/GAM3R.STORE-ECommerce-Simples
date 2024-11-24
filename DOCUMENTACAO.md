@@ -3192,7 +3192,7 @@ Agora que já invertemos a ***lógica de exibição*** da Lista de Produtos para
 
 [^ Sumário ^](./README.md)
 
-## Editando Definições do Produto
+## Editando Informações do Produto
 
 Agora iremos editar o arquivo `page.tsx` que se encontra no caminho `src\app\(paginas)\produto\[id]`, é nesse arquivo que definimos as informações do produto e desenhamos a ***Página de Informações do Produto***.  
 
@@ -3290,4 +3290,54 @@ Essa classe `.button` é ideal para criar botões estilizados com:
 - Aparência arredondada e espaçamento bem definido.
 - Texto pequeno com um peso que o destaca sem parecer excessivamente grosso.
 
-1:37
+[^ Sumário ^](./README.md)
+
+## Personalizando a Tela de Informações do Produto
+
+Agora que já sabemos que podemos não encontrar um produto, precisamos planejar como nossa Tela será renderizada. Para isso, abra o arquivo `src\app\(paginas)\produto\[id]\page.tsx`.
+
+```tsx
+// page.tsx
+
+import ProdutoNaoEncontrado from "@/app/components/produto/ProdutoNaoEncontrado"
+import { produtos } from "@/core"
+
+export default function PaginaProduto(props: any) {
+  const id = +props.params.id
+  const produto = produtos.find((produto) => produto.id === id)
+  return produto ? (
+    //* DIV principal do componente
+    <div className="flex flex-col gap-20 container py-10">
+      <h1>Produto: {produto?.nome}</h1>
+    </div>
+  ) : <ProdutoNaoEncontrado />
+}
+```
+
+### Descrição das Propriedades
+
+***DIV PRINCIPAL:***
+
+- `<div className="flex flex-col gap-20 container py-10">`:
+
+  - `flex`:  
+  Define o layout do contêiner como um ***flex container***.  
+  Permite que os elementos filhos sejam organizados ao longo de um eixo flexível *(por padrão, o **eixo horizontal**)*.
+
+  - `flex-col`:  
+  Configura o eixo principal do ***flex container*** para ser vertical.  
+  Os elementos filhos serão ***empilhados de cima para baixo***.
+
+  - `gap-20`:  
+  Adiciona um ***espaçamento fixo*** entre os elementos filhos dentro do contêiner.  
+  O valor `20` corresponde a `5rem` ***80px***, criando uma distância consistente entre os itens.
+
+  - `container`:  
+  Define um contêiner centralizado com ***largura máxima adaptativa***.  
+  Por padrão, ajusta-se ao ponto de interrupção responsivo configurado no Tailwind CSS.
+
+  - `py-10`:  
+  Adiciona um ***preenchimento vertical*** *(superior e inferior)* de `2.5rem` ***40px*** ao contêiner.  
+  Garante espaçamento interno uniforme no ***eixo Y***.
+
+Essa será a camada que conterá a junção de diversos componentes para criar a página de ***Informações do Produto***.

@@ -53,4 +53,6 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
   - [Grupo de Rotas](./DOCUMENTACAO.md/#criando-grupo-de-rotas)
   - [Componente ListaProdutos](./DOCUMENTACAO.md/#criando-componente-listaprodutos)
   - [Componente ProdutoNaoEncontrado](./DOCUMENTACAO.md/#criando-componente-produtonaoencontrado)
-  - [Editando Definições do Produto](./DOCUMENTACAO.md/#editando-definições-do-produto)
+  - [Editando Informações do Produto](./DOCUMENTACAO.md/#editando-informações-do-produto)
+    - [Classe Personalizada Botão Voltar](./DOCUMENTACAO.md/#classe-personalizada-botão-voltar)
+    - [Personalizando a Tela de Informações do Produto](./DOCUMENTACAO.md/#personalizando-a-tela-de-informações-do-produto)
