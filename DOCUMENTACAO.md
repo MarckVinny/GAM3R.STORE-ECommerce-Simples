@@ -3475,4 +3475,172 @@ Com o Componente `<TituloProduto />` criado, podemos voltar a Página de Informa
 
 Como podemos observar na imagem acima, agora temos um ***Título*** com o Nome do Produto destacado e uma ***Descrição*** com um texto menor e cinza.
 
+[^ Sumário ^](./README.md)
+
+## Componente TAG
+
+O componente `Tag` é uma representação estilizada de um ***rótulo*** ou ***marcador***, podendo conter um ***ícone*** e ***texto***. Ele suporta uma opção de estilo alternativo, controlada pela propriedade `outlined`.  
+
+Então, no caminho `src\app\components\shared\` crie o arquivo `Tag.tsx`, lembrando que você pode e deve criar diretamente o diretório e o arquivo de uma só vez.
+
+```tsx
+// Tag.tsx
+
+export interface TagProps {
+    label: string
+    icone: React.ElementType
+    outlined?: boolean
+}
+
+export default function Tag(props: TagProps) {
+    return (
+        <div
+            className={`
+                flex items-center gap-2 self-start py-1 px-4
+                rounded-full text-xs uppercase
+                ${
+                    props.outlined
+                        ? 'border border-violet-500 text-white'
+                        : 'bg-gradient-to-r from-violet-600 to-violet-700'
+                }
+                
+            `}
+        >
+            <props.icone size={15} />
+            <span>{props.label}</span>
+        </div>
+    )
+}
+```
+
+### Detalhamento
+
+#### 1. Interface `TagProps`
+
+```tsx
+export interface TagProps {
+    label: string
+    icone: React.ElementType
+    outlined?: boolean
+}
+```
+
+- Define as propriedades aceitas pelo componente:  
+
+  - `label`:  
+  Uma string que representa o texto exibido dentro da ***tag***.  
+
+  - `icone`:  
+  Um componente React que renderiza o ícone ***(passado como tipo `React.ElementType`)***.  
+
+  - `outlined?` ***(opcional)***:  
+  Um ***boolean*** que, quando verdadeiro, altera o ***estilo da tag*** para uma borda com fundo transparente.
+
+#### 2. Estrutura do Componente
+
+```tsx
+export default function Tag(props: TagProps) {
+    return (
+        <div
+            className={`
+                flex items-center gap-2 self-start py-1 px-4
+                rounded-full text-xs uppercase
+                ${
+                    props.outlined
+                        ? 'border border-violet-500 text-white'
+                        : 'bg-gradient-to-r from-violet-600 to-violet-700'
+                }
+            `}
+        >
+            <props.icone size={15} />
+            <span>{props.label}</span>
+        </div>
+    )
+}
+```
+
+### Análise de Código
+
+1. **Container Principal**
+
+   ```tsx
+   <div className={`...`}>
+   ```
+
+   - Este `div` define a estrutura da tag com classes do Tailwind CSS.
+
+2. **Classes do Tailwind CSS**
+
+   - **Estilo Geral (Comum a Todos os Modos)**  
+
+     - `flex`:  
+     Define o contêiner como um ***flex container***.  
+
+     - `items-center`:  
+     Alinha os elementos verticalmente ao centro.  
+
+     - `gap-2`:  
+     Define um espaçamento de ***0.5rem (8px)*** entre o ***ícone*** e o ***texto***.  
+
+     - `self-start`:  
+     Faz com que a tag ocupe apenas o espaço necessário.  
+
+     - `py-1 px-4`:  
+     Define o preenchimento `padding` vertical de ***0.25rem*** e horizontal de ***1rem***.  
+
+     - `rounded-full`:  
+     Aplica bordas arredondadas para criar uma aparência circular.  
+
+     - `text-xs`:  
+     Define o tamanho da fonte como pequeno ***0.75rem***.  
+
+     - `uppercase`:  
+     Converte o texto para ***letras maiúsculas***.
+
+   - **Estilo Condicional**
+
+     ```tsx
+     props.outlined
+         ? 'border border-violet-500 text-white'
+         : 'bg-gradient-to-r from-violet-600 to-violet-700'
+     ```
+
+     - Quando `outlined` é **verdadeiro**:  
+
+       - `border`:  
+       Adiciona uma borda.  
+
+       - `border-violet-500`:  
+       Define a cor da borda como violeta `#7c3aed`.  
+
+       - `text-white`:  
+       Define a cor do texto como branco.  
+
+     - Quando `outlined` é **falso**:  
+  
+       - `bg-gradient-to-r`:  
+       Adiciona um gradiente de fundo.  
+  
+       - `from-violet-600 to-violet-700`:  
+       Gradiente que vai de violeta escuro `#5b21b6` para um tom mais profundo `#4c1d95`.
+
+3. **Renderização do Ícone**
+
+   ```tsx
+   <props.icone size={15} />
+   ```
+
+   - Renderiza o componente de ícone passado através da propriedade `icone`.  
+  
+   - Define o tamanho do ícone como `15px`.
+
+4. **Renderização do Texto**
+
+   ```html
+   <span>{props.label}</span>
+   ```
+
+   - Exibe o texto fornecido na propriedade `label`.
+
+
 1:46
