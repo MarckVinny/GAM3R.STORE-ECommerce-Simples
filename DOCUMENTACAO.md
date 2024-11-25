@@ -4055,4 +4055,39 @@ Em resumo este bloco tsx cria uma interface limpa e visualmente atrativa para ex
 
 - A estilização com **Tailwind CSS** garante um layout responsivo e moderno, com um design profissional e bordas arredondadas.
 
-1:46
+[^ Sumário ^](./README.md)
+
+## Atualizando Tela Informações do Produto
+
+Agora que já temos o Componente `<InformacoesProduto />` criado, podemos adiciona-lo a nossa Página de Informações do Produto, então edite o arquivo no caminho `src\app\(paginas)\produto\[id]\page.tsx`.
+
+```tsx
+// page.tsx
+
+import InformacoesProduto from "@/app/components/produto/InformacoesProduto"
+import ProdutoNaoEncontrado from "@/app/components/produto/ProdutoNaoEncontrado"
+import TituloProduto from "@/app/components/produto/TituloProduto"
+import { produtos } from "@/core"
+
+export default function PaginaProduto(props: any) {
+  const id = +props.params.id
+  const produto = produtos.find((produto) => produto.id === id)
+  return produto ? (
+    //* DIV principal do componente
+    <div className="flex flex-col gap-20 container py-10">
+      <div className="flex flex-col gap-10">
+        <TituloProduto produto={produto} />
+        <InformacoesProduto produto={produto} />
+      </div>
+    </div>
+  ) : <ProdutoNaoEncontrado />
+}
+```
+
+Como podemos observar no código acima, fizemos a inserção do Componente `<InformacoesProduto />` exibindo as informações do Produto `produto={produto}`, com isso temos a Página do Produto apresentando suas informações como podemos ver na imagem abaixo:  
+
+<div align='center'><img alt='informações-produto' src='./imagens/022.png' /></div>
+
+<br>
+
+1:53
