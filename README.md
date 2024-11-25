@@ -59,3 +59,4 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
     - [Componente TituloProduto](./DOCUMENTACAO.md/#componente-tituloproduto)
     - [Componente TAG](./DOCUMENTACAO.md/#componente-tag)
     - [Componente Especificacoes](./DOCUMENTACAO.md/#componente-especificacoes)
+    - [Componente InformacoesProduto](./DOCUMENTACAO.md/#componente-informacoesproduto)

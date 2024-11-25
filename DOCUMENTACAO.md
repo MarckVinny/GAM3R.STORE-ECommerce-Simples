@@ -3868,5 +3868,191 @@ export default function Especificacoes(props: EspecificacoesProps) {
 
 O Componente `Especificacoes` organiza e apresenta os ***detalhes de um produto***, com destaque para um atributo principal e listagem clara dos demais. É útil para exibir informações técnicas ou características de produtos de maneira visualmente agradável e adaptável.
 
+[^ Sumário ^](./README.md)
+
+## Componente `InformacoesProduto`
+
+O Componente ***`InformacoesProduto`*** exibe informações detalhadas de um produto, incluindo sua ***imagem*** e ***especificações***. É projetado para ser ***reutilizável*** e ***dinâmico***, utilizando a estrutura do produto fornecida via `props`.  
+
+Agora crie o arquivo `InformacoesProduto.tsx` no caminho `src\app\components\produto`.
+
+```tsx
+// InformacoesProduto.tsx
+
+import { Produto } from '@/core'
+import Image from 'next/image'
+import Especificacoes from './Especificacoes'
+
+export interface InformacoesProdutoProps {
+  produto: Produto
+}
+
+export default function InformacoesProduto(props: InformacoesProdutoProps) {
+  const { produto } = props
+  return produto ? (
+    <div className="flex items-center bg-violet-dark rounded-xl p-5">
+      <div className="flex-1 relative flex justify-center h-96">
+        <Image
+          src={produto.imagem!}
+          fill
+          className="object-cover p-7"
+          alt="Imagem do Produto"
+        />
+      </div>
+      <Especificacoes produto={produto!} />
+    </div>
+  ) : null
+}
+```
+
+Abaixo, seguem as descrições dos principais elementos e funcionalidade do componente:  
+
+### Importações
+
+As importações definem as dependências necessárias para o funcionamento do componente:
+
+```tsx
+import { Produto } from '@/core'
+import Image from 'next/image'
+import Especificacoes from './Especificacoes'
+```
+
+- `import { Produto } from '@/core'`:  
+Importa o tipo `Produto` definido no núcleo da aplicação.  
+
+- `import Image from 'next/image'`:  
+Importa o componente `Image` do Next.js para renderizar imagens otimizadas.  
+
+- `import Especificacoes from './Especificacoes'`:  
+Importa o componente `Especificacoes` que será usado para exibir detalhes do produto.  
+
+### Interface das Propriedades
+
+Define o contrato de propriedades aceito pelo componente:
+
+```tsx
+export interface InformacoesProdutoProps {
+    produto: Produto
+}
+```
+
+- `produto: Produto`:  
+Um objeto do tipo `Produto`, contendo as informações do produto.
+
+### Estrutura do Componente
+
+1. **Container Principal**:  
+Esse contêiner serve como a estrutura principal para organizar o layout dos elementos internos.
+
+   - O conteúdo é envolvido em uma `div` estilizada para organização e aparência consistente:  
+
+      ```tsx
+      <div className="flex items-center bg-violet-dark rounded-xl p-5">
+      ```
+
+      - **`flex`**:  
+      Cria um contêiner flexível, permitindo que os elementos filhos (imagem e especificações) sejam alinhados lado a lado.  
+
+      - **`items-center`**:  
+      Alinha os itens ao centro verticalmente dentro do contêiner.  
+
+      - **`bg-violet-dark`**:  
+      Define o fundo com uma tonalidade escura de roxo, estilizada por uma classe personalizada.  
+
+      - **`rounded-xl`**:  
+      Aplica bordas arredondadas grandes, conferindo um visual mais moderno e amigável.  
+
+      - **`p-5`**:  
+      Adiciona 20px de espaçamento interno ao contêiner, criando margem entre o conteúdo e as bordas.  
+
+2. **Seção da Imagem**:  
+
+    ```tsx
+    <div className="flex-1 relative flex justify-center h-96">
+        <Image
+            src={produto.imagem!}
+            fill
+            className="object-cover p-7"
+            alt="Imagem do Produto"
+        />
+    </div>
+    ```
+
+   #### Descrição do `div` da Imagem
+
+    - **`flex-1`**:  
+    Faz com que esta seção ocupe todo o espaço disponível no contêiner pai, proporcionalmente ao restante.  
+
+    - **`relative`**:  
+    Define um contexto de posicionamento relativo, necessário para o comportamento do atributo `fill` do componente `Image`.  
+
+    - **`flex`**:  
+    Torna o contêiner flexível.  
+
+    - **`justify-center`**:  
+    Centraliza horizontalmente o conteúdo ***(imagem)*** dentro do contêiner.  
+
+    - **`h-96`**:  
+    Define uma altura fixa de `384px` ***(6 x 64px)***, garantindo que o contêiner tenha dimensões consistentes.  
+
+   #### Componente `Image`
+
+    O componente `Image` do Next.js é utilizado para renderizar a imagem do produto com otimização automática:  
+
+    - **`src={produto.imagem!}`**:  
+    Especifica a URL da imagem do produto. O operador `!` afirma que a propriedade `imagem` não é `null` ou `undefined`.  
+
+    - **`fill`**:  
+    Faz com que a imagem ***preencha todo o espaço*** do contêiner pai, respeitando as proporções.  
+
+    - **`className="object-cover p-7"`**:  
+
+      - **`object-cover`**:  
+      Ajusta a imagem para preencher o contêiner sem distorção, cortando as bordas, se necessário.  
+
+      - **`p-7`**:  
+      Adiciona `28px` de espaçamento interno à imagem.  
+
+    - **`alt="Imagem do Produto"`**:  
+    Fornece texto alternativo para melhorar a acessibilidade e o SEO.
+
+3. **Especificações do Produto**:  
+O componente `Especificacoes` é responsável por exibir os detalhes específicos do produto, como ***nome, descrição e características técnicas***.  
+
+    ```tsx
+    <Especificacoes produto={produto!} />
+    ```
+
+    - **`produto={produto!}`**:  
+    Passa o objeto `produto` como propriedade para o componente `Especificacoes`.
+
+    - **Renderização Condicional:**  
+    O operador `!` garante que o `produto` não é nulo ao ser passado para o componente.
+
+    Este elemento utiliza a modularidade do React para separar a lógica e apresentação das especificações do produto, permitindo que o código seja mais organizado e reutilizável.
+
+4. **Fallback para Produtos Inválidos**:  
+
+   - Caso a propriedade `produto` seja nula ou indefinida, o componente retorna `null`:
+
+   ```tsx
+   return produto ? (/* renderizar conteúdo */) : null;
+   ```
+
+### Como os Elementos Trabalham Juntos
+
+- O **contêiner externo** organiza os elementos internos ***(imagem e especificações)*** horizontalmente.
+
+- A **seção de imagem** ocupa metade ou mais do espaço disponível, dependendo do estilo aplicado ao componente **`Especificacoes`**.
+
+- O **componente `Especificacoes`** ocupa o restante do espaço, exibindo as informações detalhadas do produto.
+
+Em resumo este bloco tsx cria uma interface limpa e visualmente atrativa para exibir informações de um produto:  
+
+- A **imagem do produto** é renderizada com destaque, utilizando otimização do Next.js.
+
+- Os **detalhes do produto** são organizados em um componente modular.
+
+- A estilização com **Tailwind CSS** garante um layout responsivo e moderno, com um design profissional e bordas arredondadas.
 
 1:46
