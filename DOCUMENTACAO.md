@@ -112,13 +112,13 @@ Com isso, fizemos as seguintes alterações:
 
 - Inserimos a contante "font" no "className" do body.  
 
-  ```html
+  ```tsx
   <body className={font.className}>
   ```
 
 - Alteramos o idioma da página para português Brasil.  
 
-  ```html
+  ```tsx
   <html lang="pt-BR">
   ```  
 
@@ -3344,7 +3344,9 @@ Essa será a camada que conterá a junção de diversos componentes para criar a
 
 [^ Sumário ^](./README.md)
 
-## Componente TituloProduto
+## Componente `TituloProduto`
+
+O componente `TituloProduto` é responsável por exibir o ***título*** e a **descrição** de um produto. Ele utiliza propriedades recebidas através do objeto `props`, sendo `produto` a principal, representando os detalhes do item a serem exibidos.
 
 Para isso, crie o arquivo `TituloProduto.tsx` no caminho `src\app\components\produto`.
 
@@ -3368,15 +3370,11 @@ export default function TituloProduto(props: TituloProdutoProps) {
 }
 ```
 
-### Descrição do Componente `TituloProduto`
-
-O componente `TituloProduto` é responsável por exibir o ***título*** e a **descrição** de um produto. Ele utiliza propriedades recebidas através do objeto `props`, sendo `produto` a principal, representando os detalhes do item a serem exibidos.
-
 ### Detalhamento
 
 #### Importações
 
-```typescript
+```tsx
 import { Produto } from '@/core'
 ```
 
@@ -3384,7 +3382,7 @@ import { Produto } from '@/core'
 
 #### Interface `TituloProdutoProps`
 
-```typescript
+```tsx
 export interface TituloProdutoProps {
     produto: Produto
 }
@@ -3395,7 +3393,7 @@ export interface TituloProdutoProps {
 
 #### Estrutura do Componente
 
-```typescript
+```tsx
 export default function TituloProduto(props: TituloProdutoProps) {
     const { produto } = props
     return (
@@ -3414,7 +3412,7 @@ export default function TituloProduto(props: TituloProdutoProps) {
 
 #### Container Principal
 
-```html
+```tsx
 <div className="flex flex-col">
 ```
 
@@ -3426,7 +3424,7 @@ export default function TituloProduto(props: TituloProdutoProps) {
 
 #### Exibição do Nome do Produto
 
-```html
+```tsx
 <div className="text-2xl">{produto?.nome}</div>
 ```
 
@@ -3435,7 +3433,7 @@ export default function TituloProduto(props: TituloProdutoProps) {
 
 #### Exibição da Descrição do Produto
 
-```html
+```tsx
 <div className="font-light text-zinc-400">{produto?.descricao}</div>
 ```
 
@@ -3477,7 +3475,7 @@ Como podemos observar na imagem acima, agora temos um ***Título*** com o Nome d
 
 [^ Sumário ^](./README.md)
 
-## Componente TAG
+## Componente `TAG`
 
 O componente `Tag` é uma representação estilizada de um ***rótulo*** ou ***marcador***, podendo conter um ***ícone*** e ***texto***. Ele suporta uma opção de estilo alternativo, controlada pela propriedade `outlined`.  
 
@@ -3636,11 +3634,239 @@ export default function Tag(props: TagProps) {
 
 4. **Renderização do Texto**
 
-   ```html
+   ```tsx
    <span>{props.label}</span>
    ```
 
    - Exibe o texto fornecido na propriedade `label`.
+
+<div align='center'><img alt='TAG' src='./imagens/020.png' /></div>
+
+<br>
+
+O Componente `Tag` é uma solução estilizada para destacar informações importantes em um layout, oferecendo flexibilidade no design ***(modo contorno ou preenchido)*** e suporte para ícones e texto.
+
+[^ Sumário ^](./README.md)
+
+## Componente `Especificacoes`
+
+O componente `Especificacoes` é responsável por exibir as especificações de um produto em um layout bem estruturado, destacando um atributo principal como uma tag estilizada e listando os demais atributos de forma organizada. Ele é dinâmico, adaptando-se aos dados do produto fornecido.  
+
+Agora, no caminho `src\app\components\produto\` crie o arquivo `Especificacoes.tsx`.  
+
+```tsx
+// Especificacoes.tsx
+
+import { IconTag } from '@tabler/icons-react'
+import { Produto } from '@/core'
+import Tag from '../shared/Tag'
+
+export interface EspecificacoesProps {
+  produto: Produto
+}
+
+export default function Especificacoes(props: EspecificacoesProps) {
+  const { produto } = props
+  return produto ? (
+    <div className="flex-1 flex flex-col gap-1">
+      <div className="flex mb-3">
+        <Tag
+          label={produto.especificacoes.destaque!}
+          icone={IconTag}
+          outlined
+        />
+      </div>
+      {produto?.especificacoes &&
+        Object.keys(produto.especificacoes)
+          .filter((k) => k !== 'destaque')
+          .map((chave) => (
+            <div key={chave} className="flex gap-1">
+              <span className="p-2 w-1/3 bg-white/5 rounded">{chave}</span>
+              <span className="p-2 w-2/3 bg-white/5 rounded">
+                {produto.especificacoes[chave]}
+              </span>
+            </div>
+          ))}
+    </div>
+  ) : null
+}
+```
+
+### Detalhamento
+
+#### 1. Importações
+
+```tsx
+import { IconTag } from '@tabler/icons-react'
+import { Produto } from '@/core'
+import Tag from '../shared/Tag'
+```
+
+- `IconTag`:  
+Ícone importado da biblioteca `@tabler/icons-react`, usado como símbolo na tag de destaque.  
+
+- `Produto`:  
+Interface do modelo `Produto` importada do núcleo da aplicação, que contém os detalhes do produto.  
+
+- `Tag`:  
+Componente reutilizável que exibe ***rótulos estilizados*** com suporte para ícones.
+
+#### 2. Interface `EspecificacoesProps`
+
+```tsx
+export interface EspecificacoesProps {
+    produto: Produto
+}
+```
+
+- ***Define a estrutura das propriedades aceitas pelo componente:***  
+
+  - `produto`:  
+  Um objeto do tipo `Produto`, que contém as especificações a serem exibidas.
+
+#### 3. Estrutura do Componente
+
+```tsx
+export default function Especificacoes(props: EspecificacoesProps) {
+  const { produto } = props
+  return produto ? (
+    <div className="flex-1 flex flex-col gap-1">
+      <div className="flex mb-3">
+        <Tag
+          label={produto.especificacoes.destaque!}
+          icone={IconTag}
+          outlined
+        />
+      </div>
+      {produto?.especificacoes &&
+        Object.keys(produto.especificacoes)
+          .filter((k) => k !== 'destaque')
+          .map((chave) => (
+            <div key={chave} className="flex gap-1">
+              <span className="p-2 w-1/3 bg-white/5 rounded">{chave}</span>
+              <span className="p-2 w-2/3 bg-white/5 rounded">
+                {produto.especificacoes[chave]}
+              </span>
+            </div>
+          ))}
+    </div>
+  ) : null
+}
+```
+
+### Análise de Código
+
+1. **Validação Inicial**
+
+   ```tsx
+   return produto ? (...) : null
+   ```
+
+   - Verifica se o objeto `produto` está definido. Se não estiver, o componente retorna `null`, garantindo que nada seja renderizado.
+
+2. **Estrutura Geral**
+
+   ```tsx
+   <div className="flex-1 flex flex-col gap-1">
+   ```
+
+   - ***Configura o contêiner principal:***  
+  
+     - `flex-1`:  
+     Faz com que o contêiner ocupe toda a altura disponível no ***layout pai***.  
+  
+     - `flex flex-col`:  
+     Alinha os elementos em uma coluna.  
+
+     - `gap-1`:  
+     Define um espaçamento vertical de `0.25rem` ***(4px)*** entre os itens filhos.
+
+3. **Destaque do Produto**
+
+   ```tsx
+   <div className="flex mb-3">
+       <Tag label={produto.especificacoes.destaque!} icone={IconTag} outlined />
+   </div>
+   ```
+
+   - ***Adiciona um destaque no topo, usando o componente `Tag`:***  
+  
+     - `label`:  
+     Exibe o valor do campo `destaque` das ***especificações do produto***.  
+  
+     - `icone`:  
+     Adiciona o ícone `IconTag`.  
+  
+     - `outlined`:  
+     Ativa o estilo com borda e fundo transparente no `Tag`.  
+  
+   - ***Classes do contêiner:***  
+
+     - `flex`:  
+     Garante que o elemento seja flexível.  
+  
+     - `mb-3`:  
+     Adiciona uma margem inferior de `0.75rem` ***(12px)***.
+
+4. **Listagem das Especificações**
+
+   ```tsx
+   Object.keys(produto.especificacoes)
+       .filter((k) => k !== 'destaque')
+       .map((chave) => (
+           <div key={chave} className="flex gap-1">
+               <span className="p-2 w-1/3 bg-white/5 rounded">{chave}</span>
+               <span className="p-2 w-2/3 bg-white/5 rounded">
+                   {produto.especificacoes[chave]}
+               </span>
+           </div>
+       ))
+   ```
+
+   - **Filtragem**:  
+
+     - O método `Object.keys()` retorna todas as chaves do objeto `produto.especificacoes`.  
+  
+     - A função `filter()` remove a chave `destaque` da listagem.  
+
+   - **Renderização**:  
+
+     - Para cada chave, cria uma linha com dois elementos:  
+  
+       - **Chave**:
+
+         ```tsx
+         <span className="p-2 w-1/3 bg-white/5 rounded">{chave}</span>
+         ```
+
+         - Exibe o nome do atributo em um espaço proporcional de ***1/3 da largura total*** `w-1/3`.  
+  
+       - **Valor**:
+
+         ```tsx
+         <span className="p-2 w-2/3 bg-white/5 rounded">
+             {produto.especificacoes[chave]}
+         </span>
+         ```
+
+         - Exibe o valor correspondente do atributo em um espaço proporcional de ***2/3 da largura total*** `w-2/3`.  
+  
+     - **Classes Compartilhadas**:  
+
+       - `p-2`:  
+       Adiciona um preenchimento interno de `0.5rem` ***(8px)***.  
+
+       - `bg-white/5`:  
+       Define um fundo branco com opacidade de 5%.  
+  
+       - `rounded`:  
+       Aplica bordas arredondadas.
+
+<div align='center'><img alt='Especificações' src='./imagens/021.png' /></div>
+
+<br>
+
+O Componente `Especificacoes` organiza e apresenta os ***detalhes de um produto***, com destaque para um atributo principal e listagem clara dos demais. É útil para exibir informações técnicas ou características de produtos de maneira visualmente agradável e adaptável.
 
 
 1:46
