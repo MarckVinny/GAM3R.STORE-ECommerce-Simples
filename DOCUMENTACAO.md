@@ -4098,6 +4098,11 @@ O **`useParcelamento`** é um hook personalizado simples, projetado para calcula
 
 O hook serve para que o Componente acesse as Regras de Negócio através dele "hook" evitando quem um componente do Frontend acesse diretamente as Regras de Negócio, criando assim uma separação Lógica entre o Frontend e as Regras de Negócio.
 
+> [!NOTE]
+> Um padrão do Next.js é que todos os hooks tenham o prefixo `use` para identificá-lo como por exemplo: `useState`, `useEffect`, `useCallBack`, etc. e no caso do hook personalizado `useParcelamento` ou qualquer outro que venhamos criar.
+
+<br>
+
 Agora, dentro de `src\` crie um diretório `data\` dentro crie outro diretório `hooks\` e dentro crie o arquivo `useParcelamento.tsx`. Lembrando que pode criar o diretório e o arquivo de uma só vez para agilizar.  
 
 Crie um ***Novo Arquivo*** normalmente, mas, ao invés de colocar somente o nome do arquivo, coloque o nome dos diretórios antes, então, dentro de `src\` ***(`data\hooks\useParcelamento.tsx`)***
@@ -4138,7 +4143,7 @@ export default function useParcelamento(valor: number, quantidade: number = 12) 
   
      - O valor de cada parcela.
 
-### **Objetivo do Hook**
+### Objetivo do Hook
 
 O objetivo principal do `useParcelamento` é encapsular a lógica de cálculo de parcelamento e torná-la reutilizável em diferentes partes da aplicação.  
 
@@ -4167,14 +4172,14 @@ O hook utiliza a classe `CalcularParcelamento`, que deve implementar a lógica d
 
 Exemplo de saída esperada do método `executar`:
 
-```javascript
+```tsx
 {
     qtdeParcelas: 12,
     valorParcela: "100.00" // valor formatado
 }
 ```
 
-### **Exemplo de Uso**
+### Exemplo de Uso
 
 No componente `BannerCompra`:
 
@@ -4187,6 +4192,8 @@ const parcelamento = useParcelamento(produto.precoPromocional)
 </div>
 ```
 
-Neste exemplo, o hook simplifica o uso da lógica de parcelamento, tornando o código mais legível e organizado.
+Neste exemplo, o hook simplifica o uso da lógica de parcelamento, tornando o código mais legível e organizado.  
+
+Utilizamos essa abordagem, para evitar o uso de códigos da Regra de Negócio dentro do componentes da Aplicação ficando exposto e abrindo brechas.
 
 1:53
