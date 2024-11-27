@@ -4090,4 +4090,101 @@ Como podemos observar no código acima, fizemos a inserção do Componente `<Inf
 
 <br>
 
+[^ Sumário ^](./README.md)
+
+## Componente `useParcelamento`
+
+O **`useParcelamento`** é um hook personalizado simples, projetado para calcular os valores e detalhes de um parcelamento, como o número de parcelas e o valor de cada parcela. Ele utiliza a classe `CalcularParcelamento` do módulo `@/core` para realizar os cálculos.
+
+Agora, dentro de `src\` crie um diretório `data\` dentro crie outro diretório `hooks\` e dentro crie o arquivo `useParcelamento.tsx`. Lembrando que pode criar o diretório e o arquivo de uma só vez para agilizar.  
+
+Crie um ***Novo Arquivo*** normalmente, mas, ao invés de colocar somente o nome do arquivo, coloque o nome dos diretórios antes, então, dentro de `src\` ***(`data\hooks\useParcelamento.tsx`)***
+
+```tsx
+//useParcelamento.tsx
+
+import { CalcularParcelamento } from '@/core'
+
+export default function useParcelamento(valor: number, quantidade: number = 12) {
+    const parcelamento = new CalcularParcelamento().executar(valor, quantidade)
+    return parcelamento
+}
+```
+
+### Funcionamento do Hook
+
+1. **Entrada (Parâmetros):**
+  
+   - **`valor` (obrigatório)**:  
+   O valor total que será parcelado.
+  
+   - **`quantidade` (opcional)**:  
+   A quantidade de parcelas desejada. O padrão é 12.
+
+2. **Lógica Interna:**
+  
+   - O hook instancia a classe `CalcularParcelamento` e chama o método `executar` para calcular o parcelamento com base no `valor` e na `quantidade` fornecidos.
+  
+   - A lógica de cálculo é encapsulada na classe `CalcularParcelamento`.
+
+3. **Saída *(Retorno)*:**
+  
+   - Retorna o objeto `parcelamento` gerado pelo método `executar` da classe `CalcularParcelamento`.  
+   Este objeto contém informações como:
+  
+     - O número de parcelas.
+  
+     - O valor de cada parcela.
+
+### **Objetivo do Hook**
+
+O objetivo principal do `useParcelamento` é encapsular a lógica de cálculo de parcelamento e torná-la reutilizável em diferentes partes da aplicação.  
+
+Ele simplifica a utilização da funcionalidade de parcelamento, permitindo que os componentes o utilizem de forma direta e intuitiva, sem precisar lidar com os detalhes internos da classe `CalcularParcelamento`.
+
+### Motivo para o Uso do Hook
+
+- **Centralização e Reutilização**:  
+O cálculo de parcelamento é centralizado, tornando-o reutilizável em diferentes partes da aplicação.
+
+- **Abstração da Complexidade**:  
+A lógica de parcelamento é abstraída, permitindo que os componentes consumam diretamente os dados calculados, sem precisar saber como os cálculos são realizados.
+
+- **Customização**:  
+O hook aceita a quantidade de parcelas como parâmetro, oferecendo flexibilidade no uso.
+
+### Dependência: `CalcularParcelamento`
+
+O hook utiliza a classe `CalcularParcelamento`, que deve implementar a lógica de cálculo, como:
+
+- Divisão do valor total pelo número de parcelas.
+
+- Arredondamentos necessários para evitar problemas com centavos.
+
+- Retorno de um objeto contendo os detalhes do parcelamento.
+
+Exemplo de saída esperada do método `executar`:
+
+```javascript
+{
+    qtdeParcelas: 12,
+    valorParcela: "100.00" // valor formatado
+}
+```
+
+### **Exemplo de Uso**
+
+No componente `BannerCompra`:
+
+```tsx
+const parcelamento = useParcelamento(produto.precoPromocional)
+
+<div>
+    <span>{parcelamento.qtdeParcelas}x de</span>
+    {Moeda.formatar(parcelamento.valorParcela)}
+</div>
+```
+
+Neste exemplo, o hook simplifica o uso da lógica de parcelamento, tornando o código mais legível e organizado.
+
 1:53
