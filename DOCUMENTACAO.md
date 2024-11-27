@@ -4096,6 +4096,8 @@ Como podemos observar no código acima, fizemos a inserção do Componente `<Inf
 
 O **`useParcelamento`** é um hook personalizado simples, projetado para calcular os valores e detalhes de um parcelamento, como o número de parcelas e o valor de cada parcela. Ele utiliza a classe `CalcularParcelamento` do módulo `@/core` para realizar os cálculos.
 
+O hook serve para que o Componente acesse as Regras de Negócio através dele "hook" evitando quem um componente do Frontend acesse diretamente as Regras de Negócio, criando assim uma separação Lógica entre o Frontend e as Regras de Negócio.
+
 Agora, dentro de `src\` crie um diretório `data\` dentro crie outro diretório `hooks\` e dentro crie o arquivo `useParcelamento.tsx`. Lembrando que pode criar o diretório e o arquivo de uma só vez para agilizar.  
 
 Crie um ***Novo Arquivo*** normalmente, mas, ao invés de colocar somente o nome do arquivo, coloque o nome dos diretórios antes, então, dentro de `src\` ***(`data\hooks\useParcelamento.tsx`)***
