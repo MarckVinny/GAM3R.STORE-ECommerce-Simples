@@ -1,3 +1,4 @@
+import BannerCompra from "@/app/components/produto/BannerCompra"
 import InformacoesProduto from "@/app/components/produto/InformacoesProduto"
 import ProdutoNaoEncontrado from "@/app/components/produto/ProdutoNaoEncontrado"
 import TituloProduto from "@/app/components/produto/TituloProduto"
@@ -12,6 +13,7 @@ export default function PaginaProduto(props: any) {
       <div className="flex flex-col gap-10">
         <TituloProduto produto={produto} />
         <InformacoesProduto produto={produto} />
+        <BannerCompra produto={produto} />
       </div>
     </div>
   ) : <ProdutoNaoEncontrado />

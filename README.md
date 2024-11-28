@@ -63,3 +63,4 @@ Este projeto faz parte do Curso de Formação DEV da COD3R, e é um e-commerce s
     - [Atualizando Tela Informações do Produto](./DOCUMENTACAO.md/#atualizando-tela-informações-do-produto)
     - [O Uso de Hooks Personalizados em uma Aplicação](./DOCUMENTACAO.md/#o-uso-de-hooks-personalizados-em-uma-aplicação)
     - [Componente useParcelamento](./DOCUMENTACAO.md/#componente-useparcelamento)
+    - [Componente BannerCompra](./DOCUMENTACAO.md/#componente-bannercompra)

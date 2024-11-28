@@ -4196,4 +4196,291 @@ Neste exemplo, o hook simplifica o uso da lógica de parcelamento, tornando o c�
 
 Utilizamos essa abordagem, para evitar o uso de códigos da Regra de Negócio dentro do componentes da Aplicação ficando exposto e abrindo brechas.
 
-1:53
+[^ Sumário ^](./README.md)
+
+## Componente `BannerCompra`
+
+O Componente `BannerCompra` é responsável por exibir informações de preços e ações de compra de um produto. Ele inclui funcionalidades como exibição de ***preço base***, ***preço promocional***, ***cálculo de parcelamento*** e ***botões de ação*** para adicionar o produto ao carrinho ou seguir diretamente para o `checkout`.
+
+Agora crie o arquivo `BannerCompra.tsx` no caminho `src\app\components\produto`.
+
+```tsx
+// BannerCompra.tsx
+
+'use client'
+import { IconCreditCard, IconShoppingCart } from '@tabler/icons-react'
+import { Moeda, Produto } from '@/core'
+// import useCarrinho from '@/data/hooks/useCarrinho'
+import useParcelamento from '@/data/hooks/useParcelamento'
+import { useRouter } from 'next/navigation'
+
+export interface BannerCompraProps {
+  produto: Produto
+}
+
+export default function BannerCompra(props: BannerCompraProps) {
+  const router = useRouter()
+  const { produto } = props
+  // const { adicionarItem } = useCarrinho()
+  const parcelamento = useParcelamento(produto.precoPromocional)
+
+  return (
+    <div className="flex">
+      <div className="flex flex-col border-r border-zinc-500 pr-5">
+        <div className="line-through text-zinc-400">
+          de R$ {produto?.precoBase}
+        </div>
+        <div className="text-2xl font-semibold">
+          <span className="text-base text-zinc-300">por</span>{' '}
+          <span className="text-emerald-500">
+            R$ {produto?.precoPromocional}
+          </span>{' '}
+          <span className="text-base text-zinc-300">à vista</span>
+        </div>
+      </div>
+      <div className="flex-1 flex flex-col text-2xl font-semibold text-zinc-400 pl-5">
+        <span className="text-base text-zinc-300">
+          {parcelamento.qtdeParcelas}x de
+        </span>
+        {Moeda.formatar(parcelamento.valorParcela)}{' '}
+      </div>
+      <div className="flex gap-2 items-center">
+        <button
+          className="flex-1 button bg-pink-600"
+          onClick={() => {}}
+          // onClick={() => adicionarItem(produto)}
+        >
+          <IconShoppingCart size={20} />
+          <span>Adicionar</span>
+        </button>
+        <button
+          className="flex-1 button bg-violet-700"
+          onClick={() => {
+            // adicionarItem(produto)
+            router.push('/checkout/pagamento')
+          }}
+        >
+          <IconCreditCard size={20} />
+          <span>Comprar</span>
+        </button>
+      </div>
+    </div>
+  )
+}
+```
+
+### Importações
+
+```tsx
+import { IconCreditCard, IconShoppingCart } from '@tabler/icons-react'
+import { Moeda, Produto } from '@/core'
+// import useCarrinho from '@/data/hooks/useCarrinho'
+import useParcelamento from '@/data/hooks/useParcelamento'
+import { useRouter } from 'next/navigation'
+```
+
+- ***Ícones:***  
+`IconCreditCard` e `IconShoppingCart` são usados para representar visualmente as ***ações de comprar*** e ***adicionar ao carrinho***.
+
+- ***Core do Projeto:***
+
+  - ***`Produto`:***  
+Define a estrutura dos dados do produto.
+
+  - ***`Moeda`:***  
+Responsável por formatar valores monetários.
+
+- ***Hooks Personalizados:***
+
+  - ***`useParcelamento`:***  
+Hook para calcular o parcelamento com base no preço promocional do produto.
+
+  - ***`useCarrinho` (comentado):***  
+Gerenciaria ações relacionadas ao carrinho, mas atualmente está desativado.
+
+- ***Navegação:***
+
+  - **useRouter:**  
+  Rota do Next.js que facilita a navegação programática, como redirecionar para o checkout.
+
+### Propriedades
+
+```tsx
+export interface BannerCompraProps {
+    produto: Produto
+}
+```
+
+- ***`produto`:***  
+Um objeto do tipo Produto, contendo informações como preço base e promocional.
+
+### Estrutura do Componente
+
+### Estado e Hooks
+
+```tsx
+const router = useRouter()
+const { produto } = props
+const parcelamento = useParcelamento(produto.precoPromocional)
+```
+
+- ***`router`:***  
+Gerencia a navegação para outras páginas.
+
+- ***`produto`:***  
+Obtém os dados do produto a partir das propriedades.
+
+- ***`parcelamento`:***  
+Calcula o número de parcelas e o valor de cada parcela baseado no preço promocional.
+
+Renderização
+
+```tsx
+return (
+    <div className="flex">
+        ...
+    </div>
+)
+```
+
+O componente retorna um `div` com as seguintes seções principais:
+
+1. Informações de Preço.
+2. Detalhes de Parcelamento.
+3. Botões de Ação.
+
+### 1. Informações de Preço
+
+```tsx
+<div className="flex flex-col border-r border-zinc-500 pr-5">
+    <div className="line-through text-zinc-400">de R$ {produto?.precoBase}</div>
+    <div className="text-2xl font-semibold">
+        <span className="text-base text-zinc-300">por</span>{' '}
+        <span className="text-emerald-500">R$ {produto?.precoPromocional}</span>{' '}
+        <span className="text-base text-zinc-300">à vista</span>
+    </div>
+</div>
+```
+
+***Divisão de preço:***
+
+- ***Preço base (`line-through`):***  
+O preço original, estilizado com um risco para indicar desconto.
+
+- ***Preço promocional:***
+
+  - Destaque com a cor verde ***(`text-emerald-500`)***.
+
+  - Inclui texto informativo ***"à vista"*** para enfatizar as condições de pagamento.
+
+### 2. Detalhes de Parcelamento
+
+```tsx
+<div className="flex-1 flex flex-col text-2xl font-semibold text-zinc-400 pl-5">
+    <span className="text-base text-zinc-300">{parcelamento.qtdeParcelas}x de</span>
+    {Moeda.formatar(parcelamento.valorParcela)}{' '}
+</div>
+```
+
+- ***Parcelas:***
+
+  - Mostra o número de parcelas ***(`qtdeParcelas`)*** e o valor de cada parcela ***(`valorParcela`)***.
+
+  - Usa a função `Moeda.formatar` para exibir valores monetários no formato correto.
+
+  - ***Estilização:***  
+  Texto em cinza claro ***(`text-zinc-400`)*** e fonte em negrito para destacar.
+
+### 3. Botões de Ação
+
+```tsx
+<div className="flex gap-2 items-center">
+    <button
+        className="flex-1 button bg-pink-600"
+        onClick={() => {}}
+    >
+        <IconShoppingCart size={20} />
+        <span>Adicionar</span>
+    </button>
+    <button
+        className="flex-1 button bg-violet-700"
+        onClick={() => {
+            router.push('/checkout/pagamento')
+        }}
+    >
+        <IconCreditCard size={20} />
+        <span>Comprar</span>
+    </button>
+</div>
+```
+
+- ***Botão "Adicionar":***
+
+  - ***Ícone:***  
+  `IconShoppingCart` (20px).
+
+  - ***Ação:***  
+  O código atual não implementa lógica, mas há comentários que sugerem o uso do ***hook*** `useCarrinho`.
+
+- ***Botão "Comprar":***
+
+  - ***Ícone:***  
+  IconCreditCard (20px).
+
+  - ***Ação:***  
+  Redireciona para a página de pagamento ***(`/checkout/pagamento`)*** usando router.push.
+
+- ***Estilização:***
+
+  - ***`bg-pink-600`:***  
+  Fundo rosa para o botão de "Adicionar".
+
+  - ***`bg-violet-700`:***  
+  Fundo violeta para o botão de "Comprar".
+
+  - ***`gap-2`:***  
+  Espaçamento horizontal entre os botões.
+
+### Resumo do Componente
+
+O `BannerCompra` é um componente funcional bem estruturado e estilizado para exibir:
+
+- ***Preços:***  
+Base e promocional, com formatação visual que destaca os descontos.
+
+- ***Parcelamento:***  
+Informação dinâmica, calculada com um hook customizado.
+
+- ***Ações:***  
+Botões para adicionar ao carrinho ou ir direto para o checkout.
+
+Esse componente é ***modular***, permitindo fácil integração com outros sistemas, como o ***carrinho de compras*** ou ***checkout***.  
+Ele também utiliza boas práticas do Next.js e Tailwind CSS para garantir uma interface moderna e eficiente.
+
+Agora que já temos nosso Componente `<BannerCompra />` criado, basta adicioná-lo a Página de Informações de Produto e verificar se está funcionando corretamente.  
+
+Então, edite o arquivo `page.tsx` no caminho `src\app\(paginas)\produto\[id]\`
+
+```tsx
+// page.tsx
+
+import BannerCompra from "@/app/components/produto/BannerCompra"
+...
+
+export default function PaginaProduto(props: any) {
+...
+    <div className="flex flex-col gap-20 container py-10">
+      <div className="flex flex-col gap-10">
+        ...
+        <BannerCompra produto={produto} />
+      </div>
+    </div>
+  ) : <ProdutoNaoEncontrado />
+}
+```
+
+<div align='center'><img alt='banner-compra' src='./imagens/023.png' /></div>
+
+<br>
+
+Como podemos observar na imagem acima, temos o nosso Componente `<BannerCompra />` adicionado a nossa Página de Informações do Produto, renderizando o ***Preço base*** em cinza, ***Preço Promocional*** em verde e o ***Preço Parcelado*** dividido em ***12x*** que foi padrão estipulado e por fim exibindo dois botões alinhados do lado direito.
